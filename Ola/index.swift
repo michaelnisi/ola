@@ -26,6 +26,11 @@ public class Ola {
     SCNetworkReachabilitySetDispatchQueue(target, queue)
   }
 
+  deinit {
+    ola_set_callback(target, nil)
+    SCNetworkReachabilitySetDispatchQueue(target, nil)
+  }
+
   public func reachWithCallback (cb: (OlaStatus) -> Void) -> Bool {
     func status (flags: SCNetworkReachabilityFlags) -> OlaStatus {
       if (flags & SCNetworkReachabilityFlags(

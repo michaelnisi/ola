@@ -15,13 +15,14 @@ class ViewController: UIViewController {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
     
-    let queue = dispatch_queue_create("ola.test", DISPATCH_QUEUE_SERIAL)
-    let f = Ola(host: "google.com", queue: queue)
-    f.reachWithCallback() { status in
+    let queue = dispatch_queue_create("ola.example", DISPATCH_QUEUE_SERIAL)
+    let host = "apple.com"
+    let apple = Ola(host: host, queue: queue)
+    apple.reachWithCallback() { status in
       if status == .Reachable {
-        println("google.com is reachable")
+        println("\(host) is reachable")
       } else {
-        println("google.com is not reachable")
+        println("\(host) is not reachable")
       }
     }
   }
@@ -30,7 +31,5 @@ class ViewController: UIViewController {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
   }
-
-
 }
 

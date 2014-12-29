@@ -8,17 +8,17 @@
 
 #include "ola_helpers.h"
 
-static void
-ola_callback (
-  SCNetworkReachabilityRef	clone
+static void ola_callback (
+  SCNetworkReachabilityRef clone
 , SCNetworkReachabilityFlags cloneFlags
 , void *info) {
-  int (^cb)(SCNetworkReachabilityFlags) = info;
-  cb(cloneFlags);
+  if (info) {
+    int (^cb)(SCNetworkReachabilityFlags) = info;
+    cb(cloneFlags);
+  }
 }
 
-Boolean
-ola_set_callback (
+Boolean ola_set_callback (
   SCNetworkReachabilityRef target
 , void(^cb)(SCNetworkReachabilityFlags)) {
   void *retain = _Block_copy;
