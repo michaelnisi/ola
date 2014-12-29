@@ -11,8 +11,7 @@
 
 #import <SystemConfiguration/SystemConfiguration.h>
 
-Boolean
-ola_set_callback(
+Boolean ola_set_callback (
   SCNetworkReachabilityRef target
 , void(^cb)(SCNetworkReachabilityFlags));
 

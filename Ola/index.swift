@@ -35,7 +35,7 @@ public class Ola {
     func status (flags: SCNetworkReachabilityFlags) -> OlaStatus {
       if (flags & SCNetworkReachabilityFlags(
         kSCNetworkReachabilityFlagsConnectionRequired) != 0) {
-          return .ConnectionRequired
+        return .ConnectionRequired
       }
       if (flags & SCNetworkReachabilityFlags(
         kSCNetworkReachabilityFlagsReachable) != 0) {

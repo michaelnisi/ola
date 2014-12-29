@@ -1,9 +1,11 @@
+//
+//  Example.swift
+//  example
+//
+//  Created by Michael Nisi on 29.12.14.
+//  Copyright (c) 2014 Michael Nisi. All rights reserved.
+//
 
-# ola - check reachability of host
-
-## Example
-
-```swift
 import Foundation
 import Ola
 
@@ -14,13 +16,13 @@ public class Example: NSOperation {
   let sema = dispatch_semaphore_create(0)
 
   var ola: Ola?
-
+  
   public init (session: NSURLSession, url: NSURL, queue: dispatch_queue_t) {
     self.session = session
     self.url = url
     self.queue = queue
   }
-
+  
   func request () {
     let sema = self.sema
     let task = session.dataTaskWithURL(url) { data, response, error in
@@ -32,7 +34,7 @@ public class Example: NSOperation {
     }
     task.resume()
   }
-
+  
   func check () {
     if ola == nil {
       ola = Ola(host: url.host!, queue: queue)
@@ -41,14 +43,9 @@ public class Example: NSOperation {
       }
     }
   }
-
+  
   public override func main () {
     request()
     dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER)
   }
 }
-```
-
-## License
-
-MIT

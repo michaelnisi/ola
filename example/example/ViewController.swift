@@ -10,21 +10,19 @@ import UIKit
 import Ola
 
 class ViewController: UIViewController {
+  let queue = dispatch_queue_create("ola.example", DISPATCH_QUEUE_SERIAL)
+  let session = NSURLSession(
+    configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+  let opQueue = NSOperationQueue()
 
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
     
-    let queue = dispatch_queue_create("ola.example", DISPATCH_QUEUE_SERIAL)
-    let host = "apple.com"
-    let apple = Ola(host: host, queue: queue)
-    apple.reachWithCallback() { status in
-      if status == .Reachable {
-        println("\(host) is reachable")
-      } else {
-        println("\(host) is not reachable")
-      }
-    }
+    let url = NSURL(string: "http://apple.com")
+    let op = Example(session: session, url: url!, queue: queue)
+    op.completionBlock = { println("request completed") }
+    opQueue.addOperation(op)
   }
 
   override func didReceiveMemoryWarning() {
