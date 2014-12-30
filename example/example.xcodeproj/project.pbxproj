@@ -15,6 +15,8 @@
 		4C9373F91A5087C700FFD5D3 /* exampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373F81A5087C700FFD5D3 /* exampleTests.swift */; };
 		4C9374031A50880B00FFD5D3 /* Ola.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9374021A50880B00FFD5D3 /* Ola.framework */; };
 		4C9374151A51C24F00FFD5D3 /* Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9374141A51C24F00FFD5D3 /* Example.swift */; };
+		4C93741B1A52B56100FFD5D3 /* Ola.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9374021A50880B00FFD5D3 /* Ola.framework */; };
+		4C93741C1A52B56100FFD5D3 /* Ola.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9374021A50880B00FFD5D3 /* Ola.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,6 +28,20 @@
 			remoteInfo = example;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4C93741D1A52B56100FFD5D3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4C93741C1A52B56100FFD5D3 /* Ola.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4C9373DD1A5087C600FFD5D3 /* example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -48,6 +64,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C9374031A50880B00FFD5D3 /* Ola.framework in Frameworks */,
+				4C93741B1A52B56100FFD5D3 /* Ola.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,6 +146,7 @@
 				4C9373D91A5087C600FFD5D3 /* Sources */,
 				4C9373DA1A5087C600FFD5D3 /* Frameworks */,
 				4C9373DB1A5087C600FFD5D3 /* Resources */,
+				4C93741D1A52B56100FFD5D3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

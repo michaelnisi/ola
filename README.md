@@ -1,4 +1,3 @@
-
 # ola - check reachability of host
 
 ## Example
@@ -45,6 +44,11 @@ public class Example: NSOperation {
   public override func main () {
     request()
     dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER)
+  }
+
+  public override func cancel () {
+    dispatch_semaphore_signal(sema)
+    super.cancel()
   }
 }
 ```
