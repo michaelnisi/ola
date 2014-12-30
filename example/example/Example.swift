@@ -23,6 +23,7 @@ public class Example: NSOperation {
     self.queue = queue
   }
   
+  
   func request () {
     let sema = self.sema
     let task = session.dataTaskWithURL(url) { data, response, error in
@@ -47,5 +48,10 @@ public class Example: NSOperation {
   public override func main () {
     request()
     dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER)
+  }
+  
+  public override func cancel () {
+    dispatch_semaphore_signal(sema)
+    super.cancel()
   }
 }
