@@ -15,6 +15,7 @@ public class Example: NSOperation {
   let queue: dispatch_queue_t
   let sema = dispatch_semaphore_create(0)
 
+  weak var task: NSURLSessionTask?
   var ola: Ola?
   
   public init (session: NSURLSession, url: NSURL, queue: dispatch_queue_t) {
@@ -23,17 +24,17 @@ public class Example: NSOperation {
     self.queue = queue
   }
   
-  
   func request () {
     let sema = self.sema
-    let task = session.dataTaskWithURL(url) { data, response, error in
+    task = session.dataTaskWithURL(url) { data, response, error in
+      if self.cancelled { return }
       if error != nil {
         self.check()
       } else {
         dispatch_semaphore_signal(sema)
       }
     }
-    task.resume()
+    task?.resume()
   }
   
   func check () {
@@ -46,11 +47,13 @@ public class Example: NSOperation {
   }
   
   public override func main () {
+    if cancelled { return }
     request()
     dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER)
   }
   
   public override func cancel () {
+    task?.cancel()
     dispatch_semaphore_signal(sema)
     super.cancel()
   }

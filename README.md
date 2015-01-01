@@ -1,4 +1,7 @@
+
 # ola - check reachability of host
+
+The **ola** [Swift](https://developer.apple.com/swift/) module can be used to monitor the reachability of a named host. It applies a user callback on reachability changes.
 
 ## Example
 
@@ -52,6 +55,16 @@ public class Example: NSOperation {
   }
 }
 ```
+
+## Install
+
+To install do:
+
+```bash
+$ ./configure
+$ xcodebuild -configuration Debug build
+```
+This generates the private module map `module/module.map` and builds an iOS framework with debug configuration. Accordingly you can add `Ola.xcodeproj` to your workspace and link with `Ola.framework` in your targets.
 
 ## License
 

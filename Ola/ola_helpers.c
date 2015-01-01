@@ -18,9 +18,7 @@ static void ola_callback (
   }
 }
 
-Boolean ola_set_callback (
-  SCNetworkReachabilityRef target
-, void(^cb)(SCNetworkReachabilityFlags)) {
+Boolean ola_set_callback (SCNetworkReachabilityRef target, ola_closure cb) {
   void *retain = _Block_copy;
   SCNetworkReachabilityContext context = {
     0, cb, retain, _Block_release, NULL };

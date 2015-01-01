@@ -11,8 +11,8 @@
 
 #import <SystemConfiguration/SystemConfiguration.h>
 
-Boolean ola_set_callback (
-  SCNetworkReachabilityRef target
-, void(^cb)(SCNetworkReachabilityFlags));
+typedef void(^ola_closure)(SCNetworkReachabilityFlags);
+
+Boolean ola_set_callback (SCNetworkReachabilityRef target, ola_closure cb);
 
 #endif /* defined(__ola__ola_helpers__) */
