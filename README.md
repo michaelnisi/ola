@@ -1,11 +1,11 @@
 
 # ola - check reachability of host
 
-The **ola** [Swift](https://developer.apple.com/swift/) module monitors the reachability of a named host. It applies a callback each time the reachability of the host changes.
+The **ola** [Swift](https://developer.apple.com/swift/) module monitors the reachability of a named host. It applies a callback when the reachability of the host changes.
 
 ## Example
 
-Issue a bulletproof request that, despite unreliable network, will eventually succeed.
+Issue a bulletproof request that—despite unreliable network—will eventually succeed:
 
 ```swift
 import Foundation
@@ -72,7 +72,7 @@ These constants represent the reachability status.
 
 - `Unknown`
 - `Reachable`
-- `ConnectionRequired`
+- `Cellular`
 
 ### Ola
 
@@ -85,14 +85,23 @@ The `Ola` class is the sole API of this framework.
 ### Creating an Ola object
 
 ```swift
-init (host: String, queue: dispatch_queue_t)
+init? (host: String, queue: dispatch_queue_t)
 ```
 Initializes an `Ola` instance to monitor reachability of the target host.
 
 - `host` The name of the host
 - `queue` The queue to schedule the callbacks
 
-Returns newly initialized `Ola` object.
+Returns newly initialized `Ola` object or `nil`, if the host could not be scheduled.
+
+### Checking reachability
+
+```swift
+reach () -> OlaStatus
+```
+Checks the reachability of the host.
+
+Returns `OlaStatus`.
 
 ### Monitoring reachability
 
