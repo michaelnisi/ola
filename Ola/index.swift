@@ -16,9 +16,9 @@ public enum OlaStatus: Int {
 
 extension OlaStatus: Printable {
   static let desc = [
-    0: "unkown"
-  , 1: "reachable"
-  , 2: "cellular"
+    0: "OlaStatus: unkown"
+  , 1: "OlaStatus: reachable"
+  , 2: "OlaStatus: cellular"
   ]
   public var description: String {
     return OlaStatus.desc[self.rawValue]!
@@ -37,16 +37,24 @@ func status (flags: SCNetworkReachabilityFlags) -> OlaStatus {
   return .Unknown
 }
 
+private func ok (value: Boolean) -> Bool {
+  return value == 1
+}
+
 public class Ola {
-  let target: SCNetworkReachability
+  let target: SCNetworkReachability!
   let queue: dispatch_queue_t
 
-  public init? (host: String, queue: dispatch_queue_t) {
+  public init? (host h: String?, queue: dispatch_queue_t) {
     self.queue = queue
-    let ref = SCNetworkReachabilityCreateWithName(
-      kCFAllocatorDefault, host)
-    target = ref.takeRetainedValue()
-    if SCNetworkReachabilitySetDispatchQueue(target, queue) != 1 {
+    if let host = h {
+      let ref = SCNetworkReachabilityCreateWithName(
+        kCFAllocatorDefault, host)
+      target = ref.takeRetainedValue()
+      if !ok(SCNetworkReachabilitySetDispatchQueue(target, queue)) {
+        return nil
+      }
+    } else {
       return nil
     }
   }
@@ -58,8 +66,11 @@ public class Ola {
 
   public func reach () -> OlaStatus {
     var flags: SCNetworkReachabilityFlags = 0
-    let ok = SCNetworkReachabilityGetFlags(target, &flags)
-    return ok == 1 ? status(flags) : .Unknown
+    if ok(SCNetworkReachabilityGetFlags(target, &flags)) {
+      return status(flags)
+    } else {
+      return .Unknown
+    }
   }
 
   public func reachWithCallback (cb: (OlaStatus) -> Void) -> Bool {
