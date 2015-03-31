@@ -157,13 +157,12 @@ Returns `true` if the callback has been successfully installed.
 
 ## Install
 
-To install do:
+To configure the [private module map file](http://clang.llvm.org/docs/Modules.html#private-module-map-files) `module/module.map` do:
 
 ```bash
 $ ./configure
-$ xcodebuild -configuration Debug build
 ```
-This generates the private module map `module/module.map` and builds an iOS framework with debug configuration. Accordingly you can add `Ola.xcodeproj` to your workspace and link with `Ola.framework` in your targets.
+And add `Ola.xcodeproj` to your workspace to link with `Ola.framework` in your targets.
 
 ## License
 
