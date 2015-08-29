@@ -9,9 +9,9 @@
 #include "ola_helpers.h"
 
 static void ola_callback (
-  SCNetworkReachabilityRef clone
-, SCNetworkReachabilityFlags cloneFlags
-, void *info) {
+  SCNetworkReachabilityRef clone,
+  SCNetworkReachabilityFlags cloneFlags,
+  void *info) {
   if (info) {
     int (^cb)(SCNetworkReachabilityFlags) = info;
     cb(cloneFlags);

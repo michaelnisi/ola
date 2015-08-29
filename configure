@@ -1,8 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 SDK=$SDKROOT
-if test -z "$SDK"
-then
+if test -z "$SDK"; then
   if [ -n "$1" ]; then
     SDK=$1
   else

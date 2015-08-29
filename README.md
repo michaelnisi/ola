@@ -1,4 +1,3 @@
-
 # ola - check reachability of host
 
 The **ola** [Swift](https://developer.apple.com/swift/) module monitors the reachability of a named host. It applies a callback when the reachability of the host changes.
@@ -157,7 +156,7 @@ Returns `true` if the callback has been successfully installed.
 
 ## Install
 
-To configure the [private module map file](http://clang.llvm.org/docs/Modules.html#private-module-map-files) `module/module.map` do:
+To configure the [module map] `module/module.map` for the C helpers that wrap the Swift callbacks:
 
 ```bash
 $ ./configure

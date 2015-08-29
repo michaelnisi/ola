@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C37D4001ABD81E800CE181C /* Ola.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C37D3FF1ABD81E800CE181C /* Ola.framework */; };
-		4C37D4011ABD81F100CE181C /* Ola.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C37D3FF1ABD81E800CE181C /* Ola.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C9373E31A5087C600FFD5D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E21A5087C600FFD5D3 /* AppDelegate.swift */; };
 		4C9373E51A5087C600FFD5D3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E41A5087C600FFD5D3 /* ViewController.swift */; };
 		4C9373E81A5087C600FFD5D3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373E61A5087C600FFD5D3 /* Main.storyboard */; };
@@ -16,6 +14,8 @@
 		4C9373ED1A5087C600FFD5D3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373EB1A5087C600FFD5D3 /* LaunchScreen.xib */; };
 		4C9373F91A5087C700FFD5D3 /* exampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373F81A5087C700FFD5D3 /* exampleTests.swift */; };
 		4C9374151A51C24F00FFD5D3 /* Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9374141A51C24F00FFD5D3 /* Example.swift */; };
+		4E0B19541B909B7300F12A4C /* Ola.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E0B19531B909B7300F12A4C /* Ola.framework */; };
+		4E0B19551B909B8300F12A4C /* Ola.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4E0B19531B909B7300F12A4C /* Ola.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,7 +35,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4C37D4011ABD81F100CE181C /* Ola.framework in Embed Frameworks */,
+				4E0B19551B909B8300F12A4C /* Ola.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -43,7 +43,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4C37D3FF1ABD81E800CE181C /* Ola.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ola.framework; path = "../../../Library/Developer/Xcode/DerivedData/Ola-ddxoavtvgpmqzggbeaeokpggxuwx/Build/Products/Debug-iphoneos/Ola.framework"; sourceTree = "<group>"; };
 		4C9373DD1A5087C600FFD5D3 /* example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C9373E11A5087C600FFD5D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C9373E21A5087C600FFD5D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -55,6 +54,7 @@
 		4C9373F71A5087C700FFD5D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C9373F81A5087C700FFD5D3 /* exampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exampleTests.swift; sourceTree = "<group>"; };
 		4C9374141A51C24F00FFD5D3 /* Example.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Example.swift; sourceTree = "<group>"; };
+		4E0B19531B909B7300F12A4C /* Ola.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ola.framework; path = "../../../Library/Developer/Xcode/DerivedData/Ola-gydftdkcfqgcipezchlbajkaovpd/Build/Products/Debug-iphoneos/Ola.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C37D4001ABD81E800CE181C /* Ola.framework in Frameworks */,
+				4E0B19541B909B7300F12A4C /* Ola.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,7 +79,7 @@
 		4C9373D41A5087C600FFD5D3 = {
 			isa = PBXGroup;
 			children = (
-				4C37D3FF1ABD81E800CE181C /* Ola.framework */,
+				4E0B19531B909B7300F12A4C /* Ola.framework */,
 				4C9373DF1A5087C600FFD5D3 /* example */,
 				4C9373F51A5087C700FFD5D3 /* exampleTests */,
 				4C9373DE1A5087C600FFD5D3 /* Products */,
@@ -179,11 +179,14 @@
 		4C9373D51A5087C600FFD5D3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Michael Nisi";
 				TargetAttributes = {
 					4C9373DC1A5087C600FFD5D3 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = X23V32HT8X;
 					};
 					4C9373F11A5087C700FFD5D3 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -299,6 +302,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -360,14 +364,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"/Users/michael/Workspace/Ola/build/Debug-iphoneos",
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/Ola-ddxoavtvgpmqzggbeaeokpggxuwx/Build/Products/Debug-iphoneos",
-				);
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.michaelnisi.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -375,14 +380,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"/Users/michael/Workspace/Ola/build/Debug-iphoneos",
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/Ola-ddxoavtvgpmqzggbeaeokpggxuwx/Build/Products/Debug-iphoneos",
-				);
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.michaelnisi.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -400,6 +406,7 @@
 				);
 				INFOPLIST_FILE = exampleTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.michaelnisi.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/example.app/example";
 			};
@@ -415,6 +422,7 @@
 				);
 				INFOPLIST_FILE = exampleTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.michaelnisi.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/example.app/example";
 			};
