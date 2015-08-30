@@ -46,7 +46,8 @@ public class Example: NSOperation {
         return
       }
       if let er = error {
-        if er.code != -999 {
+        if er.code == NSURLErrorNotConnectedToInternet ||
+           er.code == NSURLErrorNetworkConnectionLost {
           self?.check()
           return
         }
