@@ -26,7 +26,7 @@ public class Example: NSOperation {
   func lock () {
     if !cancelled && sema == nil {
       sema = dispatch_semaphore_create(0)
-      dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER)
+      dispatch_semaphore_wait(sema!, DISPATCH_TIME_FOREVER)
     }
   }
 
@@ -66,7 +66,7 @@ public class Example: NSOperation {
   }
 
   lazy var ola: Ola? = { [unowned self] in
-    Ola(host: self.url.host, queue: self.queue)
+    Ola(host: self.url.host!, queue: self.queue)
   }()
 
   func check () {
@@ -82,7 +82,7 @@ public class Example: NSOperation {
         }
       }
     } else {
-      println("could not initialize ola")
+      print("could not initialize ola")
     }
   }
 
