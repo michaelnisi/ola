@@ -129,7 +129,7 @@ class Example: NSOperation {
 }
 ```
 
-To try this, issue requests with the app while walking around the edges of connectivity or toggling Network settings.
+To try this, put the example app on your device and tap the 'Request', executing the operation above, while taking at the perimeter of your WLAN or fiddling with your network settings.
 
 ## Plumbing
 
