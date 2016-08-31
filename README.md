@@ -1,169 +1,146 @@
 # ola - check reachability of host
 
-The **ola** [Swift](https://developer.apple.com/swift/) module monitors the reachability of a named host. It applies a callback when the reachability of the host changes.
+The **ola** [Swift](https://developer.apple.com/swift/) module monitors reachability of a named host. It applies a callback when the reachability of the host changes.
 
 ## Example
 
-Issue a bulletproof request that—despite unreliable network—will eventually succeed:
+Issue a bulletproof request that, despite unreliable or no network connection, will eventually succeed, when the connection becomes available:
 
 ```swift
 import Foundation
 import Ola
 
-public class Example: NSOperation {
+enum ExampleError: ErrorType {
+  case Cancelled
+}
+
+class Example: NSOperation {
+
+  private var _executing: Bool = false
+
+  override var executing: Bool {
+    get { return _executing }
+    set {
+      assert(newValue != _executing)
+      willChangeValueForKey("isExecuting")
+      _executing = newValue
+      didChangeValueForKey("isExecuting")
+    }
+  }
+
+  private var _finished: Bool = false
+
+  override var finished: Bool {
+    get { return _finished }
+    set {
+      assert(newValue != _finished)
+      willChangeValueForKey("isFinished")
+      _finished = newValue
+      didChangeValueForKey("isFinished")
+    }
+  }
+
   let queue: dispatch_queue_t
   let session: NSURLSession
   let url: NSURL
 
-  public init (session: NSURLSession, url: NSURL, queue: dispatch_queue_t) {
+  init(session: NSURLSession, url: NSURL, queue: dispatch_queue_t) {
     self.session = session
     self.url = url
     self.queue = queue
-  }
-
-  var sema: dispatch_semaphore_t?
-
-  func lock () {
-    if !cancelled && sema == nil {
-      sema = dispatch_semaphore_create(0)
-      dispatch_semaphore_wait(sema!, DISPATCH_TIME_FOREVER)
-    }
-  }
-
-  func unlock () {
-    if let sema = self.sema {
-      dispatch_semaphore_signal(sema)
-    }
-  }
-
-  weak var task: NSURLSessionTask?
-
-  func request () {
-    self.task?.cancel()
-    self.task = session.dataTaskWithURL(url) {
-      [weak self] data, response, error in
-      if self?.cancelled == true {
-        return
-      }
-      if let er = error {
-        if er.code == NSURLErrorNotConnectedToInternet ||
-           er.code == NSURLErrorNetworkConnectionLost {
-          self?.check()
-          return
-        }
-      }
-      self?.unlock()
-    }
-    self.task?.resume()
   }
 
   var allowsCellularAccess: Bool { get {
     return session.configuration.allowsCellularAccess }
   }
 
-  func reachable (status: OlaStatus) -> Bool {
-    return status == .Reachable || (status == .Cellular
-      && allowsCellularAccess)
+  func reachable(status: OlaStatus) -> Bool {
+    return status == .Reachable || (status == .Cellular && allowsCellularAccess)
   }
 
   lazy var ola: Ola? = { [unowned self] in
     Ola(host: self.url.host!, queue: self.queue)
   }()
 
-  func check () {
+  func check() {
     if let ola = self.ola {
       if reachable(ola.reach()) {
         request()
       } else {
         ola.reachWithCallback() { [weak self] status in
           if self?.cancelled == false
-          && self?.reachable(status) == true {
+            && self?.reachable(status) == true {
             self?.request()
           }
         }
       }
     } else {
-      print("could not initialize ola")
+      print("could not initialize")
     }
   }
 
-  public override func main () {
-    if cancelled {
-      return
-    }
-    request()
-    lock()
-  }
+  var error: ErrorType? = nil
 
-  public override func cancel () {
+  private func done(error: ErrorType? = nil) {
     task?.cancel()
-    unlock()
+    self.error = error
+    finished = true
+  }
+
+  weak var task: NSURLSessionTask?
+
+  func request() {
+    self.task?.cancel()
+
+    self.task = session.dataTaskWithURL(url) {
+      [weak self] data, response, error in
+      if self?.cancelled == true {
+        return
+      }
+      if let er = error {
+        switch er.code {
+        case NSURLErrorCancelled:
+          return
+        case NSURLErrorNotConnectedToInternet, NSURLErrorNetworkConnectionLost:
+          self?.check()
+          return
+        default:
+          self?.done(er)
+          return
+        }
+      }
+      self?.done()
+    }
+    self.task?.resume()
+  }
+
+  override func start() {
+    guard !cancelled else {
+      return done()
+    }
+    executing = true
+    request()
+  }
+
+  override func cancel() {
+    done(ExampleError.Cancelled)
     super.cancel()
   }
 }
 ```
 
-To try this put the example app on your device and take a walk around the edges of connectivity (or fiddle with Settings).
+To try this, issue requests with the app while walking around the edges of connectivity or toggling Network settings.
 
-## types
+## Plumbing
 
-### OlaStatus
-
-These constants represent the reachability status.
-
-- `Unknown`
-- `Reachable`
-- `Cellular`
-
-### Ola
-
-An `Ola` object represents one reachability target.
-
-## exports
-
-The `Ola` class is the sole API of this framework.
-
-### Creating an Ola object
-
-```swift
-init? (host: String, queue: dispatch_queue_t)
-```
-Initializes an `Ola` instance to monitor reachability of the target host.
-
-- `host` The name of the host
-- `queue` The queue to schedule the callbacks
-
-Returns newly initialized `Ola` object or `nil`, if the host could not be scheduled.
-
-### Checking reachability
-
-```swift
-reach () -> OlaStatus
-```
-Checks the reachability of the host.
-
-Returns `OlaStatus`.
-
-### Monitoring reachability
-
-```swift
-reachWithCallback (cb: (OlaStatus) -> Void) -> Bool
-```
-Installs the callback to be applied when the reachability of the host changes. The monitoring stops when the given `Ola` object deinitializes.
-
-- `cb` The callback to apply on reachability changes.
-
-Returns `true` if the callback has been successfully installed.
-
-## Install
-
-To configure the [module map] `module/module.map` for the C helpers that wrap the Swift callbacks:
+To configure `module/module.map` for the C helpers wrapping the Swift callbacks, do:
 
 ```bash
 $ ./configure
 ```
-And add `Ola.xcodeproj` to your workspace to link with `Ola.framework` in your targets.
+
+Add `Ola.xcodeproj` to your workspace to link with `Ola.framework` in your targets.
 
 ## License
 
-MIT
+[MIT License](https://raw.github.com/michaelnisi/ola/master/LICENSE)

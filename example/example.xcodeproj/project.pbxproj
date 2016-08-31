@@ -14,8 +14,8 @@
 		4C9373ED1A5087C600FFD5D3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373EB1A5087C600FFD5D3 /* LaunchScreen.xib */; };
 		4C9373F91A5087C700FFD5D3 /* exampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373F81A5087C700FFD5D3 /* exampleTests.swift */; };
 		4C9374151A51C24F00FFD5D3 /* Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9374141A51C24F00FFD5D3 /* Example.swift */; };
-		4E0B19541B909B7300F12A4C /* Ola.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E0B19531B909B7300F12A4C /* Ola.framework */; };
-		4E0B19551B909B8300F12A4C /* Ola.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4E0B19531B909B7300F12A4C /* Ola.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4CF5ADD41D75608E00B87442 /* Ola.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF5ADD31D75608E00B87442 /* Ola.framework */; };
+		4CF5ADD51D75609400B87442 /* Ola.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF5ADD31D75608E00B87442 /* Ola.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,7 +35,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4E0B19551B909B8300F12A4C /* Ola.framework in Embed Frameworks */,
+				4CF5ADD51D75609400B87442 /* Ola.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -54,7 +54,7 @@
 		4C9373F71A5087C700FFD5D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C9373F81A5087C700FFD5D3 /* exampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exampleTests.swift; sourceTree = "<group>"; };
 		4C9374141A51C24F00FFD5D3 /* Example.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Example.swift; sourceTree = "<group>"; };
-		4E0B19531B909B7300F12A4C /* Ola.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ola.framework; path = "../../../Library/Developer/Xcode/DerivedData/Ola-gydftdkcfqgcipezchlbajkaovpd/Build/Products/Debug-iphoneos/Ola.framework"; sourceTree = "<group>"; };
+		4CF5ADD31D75608E00B87442 /* Ola.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ola.framework; path = "../../../Library/Developer/Xcode/DerivedData/reachforthestars-fipanmlchnozafffoirhdmphaobh/Build/Products/Debug-iphonesimulator/Ola.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E0B19541B909B7300F12A4C /* Ola.framework in Frameworks */,
+				4CF5ADD41D75608E00B87442 /* Ola.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,7 +79,7 @@
 		4C9373D41A5087C600FFD5D3 = {
 			isa = PBXGroup;
 			children = (
-				4E0B19531B909B7300F12A4C /* Ola.framework */,
+				4CF5ADD31D75608E00B87442 /* Ola.framework */,
 				4C9373DF1A5087C600FFD5D3 /* example */,
 				4C9373F51A5087C700FFD5D3 /* exampleTests */,
 				4C9373DE1A5087C600FFD5D3 /* Products */,

@@ -9,94 +9,121 @@
 import Foundation
 import Ola
 
-public class Example: NSOperation {
+enum ExampleError: ErrorType {
+  case Cancelled
+}
+
+class Example: NSOperation {
+
+  private var _executing: Bool = false
+  
+  override var executing: Bool {
+    get { return _executing }
+    set {
+      assert(newValue != _executing)
+      willChangeValueForKey("isExecuting")
+      _executing = newValue
+      didChangeValueForKey("isExecuting")
+    }
+  }
+  
+  private var _finished: Bool = false
+  
+  override var finished: Bool {
+    get { return _finished }
+    set {
+      assert(newValue != _finished)
+      willChangeValueForKey("isFinished")
+      _finished = newValue
+      didChangeValueForKey("isFinished")
+    }
+  }
+  
   let queue: dispatch_queue_t
   let session: NSURLSession
   let url: NSURL
 
-  public init (session: NSURLSession, url: NSURL, queue: dispatch_queue_t) {
+  init(session: NSURLSession, url: NSURL, queue: dispatch_queue_t) {
     self.session = session
     self.url = url
     self.queue = queue
   }
-
-  var sema: dispatch_semaphore_t?
-
-  func lock () {
-    if !cancelled && sema == nil {
-      sema = dispatch_semaphore_create(0)
-      dispatch_semaphore_wait(sema!, DISPATCH_TIME_FOREVER)
-    }
-  }
-
-  func unlock () {
-    if let sema = self.sema {
-      dispatch_semaphore_signal(sema)
-    }
-  }
-
-  weak var task: NSURLSessionTask?
-
-  func request () {
-    self.task?.cancel()
-    self.task = session.dataTaskWithURL(url) {
-      [weak self] data, response, error in
-      if self?.cancelled == true {
-        return
-      }
-      if let er = error {
-        if er.code == NSURLErrorNotConnectedToInternet ||
-           er.code == NSURLErrorNetworkConnectionLost {
-          self?.check()
-          return
-        }
-      }
-      self?.unlock()
-    }
-    self.task?.resume()
-  }
-
+  
   var allowsCellularAccess: Bool { get {
     return session.configuration.allowsCellularAccess }
   }
-
-  func reachable (status: OlaStatus) -> Bool {
-    return status == .Reachable || (status == .Cellular
-      && allowsCellularAccess)
+  
+  func reachable(status: OlaStatus) -> Bool {
+    return status == .Reachable || (status == .Cellular && allowsCellularAccess)
   }
-
+  
   lazy var ola: Ola? = { [unowned self] in
     Ola(host: self.url.host!, queue: self.queue)
   }()
-
-  func check () {
+  
+  func check() {
     if let ola = self.ola {
       if reachable(ola.reach()) {
         request()
       } else {
         ola.reachWithCallback() { [weak self] status in
           if self?.cancelled == false
-          && self?.reachable(status) == true {
+            && self?.reachable(status) == true {
             self?.request()
           }
         }
       }
     } else {
-      print("could not initialize ola")
+      print("could not initialize")
     }
   }
-
-  public override func main () {
-    if cancelled {
-      return
-    }
-    request()
-    lock()
-  }
-
-  public override func cancel () {
+  
+  var error: ErrorType? = nil
+  
+  private func done(error: ErrorType? = nil) {
     task?.cancel()
-    unlock()
+    self.error = error
+    executing = false
+    finished = true
+  }
+
+  weak var task: NSURLSessionTask?
+
+  func request() {
+    self.task?.cancel()
+    
+    self.task = session.dataTaskWithURL(url) {
+      [weak self] data, response, error in
+      if self?.cancelled == true {
+        return
+      }
+      if let er = error {
+        switch er.code {
+        case NSURLErrorCancelled:
+          return
+        case NSURLErrorNotConnectedToInternet, NSURLErrorNetworkConnectionLost:
+          self?.check()
+          return
+        default:
+          self?.done(er)
+          return
+        }
+      }
+      self?.done()
+    }
+    self.task?.resume()
+  }
+  
+  override func start() {
+    guard !cancelled else {
+      return done()
+    }
+    executing = true
+    request()
+  }
+
+  override func cancel() {
+    done(ExampleError.Cancelled)
     super.cancel()
   }
 }

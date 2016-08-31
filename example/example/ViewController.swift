@@ -28,7 +28,12 @@ class ViewController: UIViewController {
     let url = NSURL(string: "http://apple.com")
     let q = dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)
     let op = Example(session: session, url: url!, queue: q)
-    op.completionBlock = {
+    op.completionBlock = { [weak op] in
+      if let er = op?.error {
+        print("completed with error: \(er)")
+      } else {
+        print("ok")
+      }
       dispatch_sync(dispatch_get_main_queue()) {
         sender.enabled = true
       }

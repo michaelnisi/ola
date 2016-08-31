@@ -2,7 +2,7 @@ project=Ola.xcodeproj
 scheme=Ola
 sdk=iphonesimulator
 
-all: clean build
+all: clean debug
 
 clean:
 	-rm -rf build
@@ -13,9 +13,4 @@ debug:
 release:
 	xcodebuild
 
-bump:
-	agvtool bump
-
-build: release bump
-
-.PHONY: all clean debug release bump
+.PHONY: all clean debug release
