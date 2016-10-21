@@ -10,32 +10,33 @@ import UIKit
 import Ola
 
 class ViewController: UIViewController {
-  let session: NSURLSession = {
-    let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
-    conf.requestCachePolicy = .ReloadIgnoringLocalCacheData
-    return NSURLSession(configuration: conf)
+  let session: URLSession = {
+    let conf = URLSessionConfiguration.default
+    conf.requestCachePolicy = .reloadIgnoringLocalCacheData
+    conf.timeoutIntervalForRequest = 5
+    return URLSession(configuration: conf)
   }()
 
-  let queue = NSOperationQueue()
-  weak var op: NSOperation?
+  let queue = OperationQueue()
+  weak var op: Operation?
 
-  @IBAction func cancelUp(sender: UIButton) {
+  @IBAction func cancelUp(_ sender: UIButton) {
     op?.cancel()
   }
   
-  @IBAction func requestUp(sender: UIButton) {
-    sender.enabled = false
-    let url = NSURL(string: "http://apple.com")
-    let q = dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)
+  @IBAction func requestUp(_ sender: UIButton) {
+    sender.isEnabled = false
+    let url = URL(string: "https://apple.com")
+    let q = DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated)
     let op = Example(session: session, url: url!, queue: q)
     op.completionBlock = { [weak op] in
       if let er = op?.error {
-        print("completed with error: \(er)")
+        NSLog("\(#function): completed with error: \(er)")
       } else {
-        print("ok")
+        NSLog("\(#function): ok")
       }
-      dispatch_sync(dispatch_get_main_queue()) {
-        sender.enabled = true
+      DispatchQueue.main.sync {
+        sender.isEnabled = true
       }
     }
     queue.addOperation(op)

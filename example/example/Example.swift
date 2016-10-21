@@ -9,41 +9,17 @@
 import Foundation
 import Ola
 
-enum ExampleError: ErrorType {
-  case Cancelled
+enum ExampleError: Error {
+  case cancelled
 }
 
-class Example: NSOperation {
+class Example: Operation {
+  
+  private let queue: DispatchQueue
+  private let session: URLSession
+  private let url: URL
 
-  private var _executing: Bool = false
-  
-  override var executing: Bool {
-    get { return _executing }
-    set {
-      assert(newValue != _executing)
-      willChangeValueForKey("isExecuting")
-      _executing = newValue
-      didChangeValueForKey("isExecuting")
-    }
-  }
-  
-  private var _finished: Bool = false
-  
-  override var finished: Bool {
-    get { return _finished }
-    set {
-      assert(newValue != _finished)
-      willChangeValueForKey("isFinished")
-      _finished = newValue
-      didChangeValueForKey("isFinished")
-    }
-  }
-  
-  let queue: dispatch_queue_t
-  let session: NSURLSession
-  let url: NSURL
-
-  init(session: NSURLSession, url: NSURL, queue: dispatch_queue_t) {
+  init(session: URLSession, url: URL, queue: DispatchQueue) {
     self.session = session
     self.url = url
     self.queue = queue
@@ -53,8 +29,15 @@ class Example: NSOperation {
     return session.configuration.allowsCellularAccess }
   }
   
-  func reachable(status: OlaStatus) -> Bool {
-    return status == .Reachable || (status == .Cellular && allowsCellularAccess)
+  func reachable(_ status: OlaStatus) -> Bool {
+    switch status {
+    case .reachable:
+      return true
+    case .cellular:
+      return allowsCellularAccess
+    case .unknown:
+      return false
+    }
   }
   
   lazy var ola: Ola? = { [unowned self] in
@@ -66,42 +49,50 @@ class Example: NSOperation {
       if reachable(ola.reach()) {
         request()
       } else {
-        ola.reachWithCallback() { [weak self] status in
-          if self?.cancelled == false
+        let ok = ola.reachWithCallback() { [weak self] status in
+          if self?.isCancelled == false
             && self?.reachable(status) == true {
             self?.request()
           }
         }
+        if !ok {
+          fatalError("could not install callback")
+        }
       }
     } else {
-      print("could not initialize")
+      fatalError("could not initialize")
     }
   }
   
-  var error: ErrorType? = nil
   
-  private func done(error: ErrorType? = nil) {
+  // Neither protected nor synchronized for brevity.
+  var error: Error? = nil
+  
+  private func done(_ error: Error? = nil) {
     task?.cancel()
     self.error = error
-    executing = false
-    finished = true
+    isExecuting = false
+    isFinished = true
   }
 
-  weak var task: NSURLSessionTask?
+  weak var task: URLSessionTask?
 
   func request() {
     self.task?.cancel()
     
-    self.task = session.dataTaskWithURL(url) {
+    self.task = session.dataTask(with: url, completionHandler: {
       [weak self] data, response, error in
-      if self?.cancelled == true {
+      if self?.isCancelled == true {
         return
       }
       if let er = error {
-        switch er.code {
+        switch er._code {
         case NSURLErrorCancelled:
           return
-        case NSURLErrorNotConnectedToInternet, NSURLErrorNetworkConnectionLost:
+        case
+        NSURLErrorTimedOut,
+        NSURLErrorNotConnectedToInternet,
+        NSURLErrorNetworkConnectionLost:
           self?.check()
           return
         default:
@@ -110,20 +101,44 @@ class Example: NSOperation {
         }
       }
       self?.done()
-    }
+    }) 
     self.task?.resume()
   }
   
+  // MARK: - Operation
+  
+  private var _executing: Bool = false
+  
+  override var isExecuting: Bool {
+    get { return _executing }
+    set {
+      willChangeValue(forKey: "isExecuting")
+      _executing = newValue
+      didChangeValue(forKey: "isExecuting")
+    }
+  }
+  
+  private var _finished: Bool = false
+  
+  override var isFinished: Bool {
+    get { return _finished }
+    set {
+      willChangeValue(forKey: "isFinished")
+      _finished = newValue
+      didChangeValue(forKey: "isFinished")
+    }
+  }
+  
   override func start() {
-    guard !cancelled else {
+    guard !isCancelled else {
       return done()
     }
-    executing = true
+    isExecuting = true
     request()
   }
 
   override func cancel() {
-    done(ExampleError.Cancelled)
+    done(ExampleError.cancelled)
     super.cancel()
   }
 }
