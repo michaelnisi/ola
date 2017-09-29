@@ -1,8 +1,5 @@
 # Ola - check reachability of host
 
-[![Swift 3](https://img.shields.io/badge/Swift-3.0-blue.svg)](https://swift.org/blog/swift-3-0-released/)
-[![Platform](https://img.shields.io/badge/platforms-iOS-blue.svg)](https://developer.apple.com/discover/)
-
 The **Ola** [Swift](https://swift.org/) module monitors reachability of a named host. It applies a callback when the reachability of the host changes. **Ola** is a simple Swift wrapper around some of Apple’s [System Configuration](https://developer.apple.com/reference/SystemConfiguration) APIs, making them easier to use.
 
 ## Example
