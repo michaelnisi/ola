@@ -28,6 +28,8 @@ class ViewController: UIViewController {
   }
 
   @IBAction func valueChanged(_ sender: UISegmentedControl) {
+    assert(Thread.isMainThread)
+
     func done() {
       DispatchQueue.main.async {
         sender.selectedSegmentIndex = 1
@@ -41,7 +43,7 @@ class ViewController: UIViewController {
         return done()
       }
 
-      probe = p
+      self.probe = p
 
       let status = p.reach()
       guard (status == .cellular || status == .reachable) else {
@@ -59,9 +61,7 @@ class ViewController: UIViewController {
         return
       }
 
-      DispatchQueue.main.async {
-        self.valueChanged(sender)
-      }
+      valueChanged(sender)
     }
 
     switch sender.selectedSegmentIndex {
