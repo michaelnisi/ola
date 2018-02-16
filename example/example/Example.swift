@@ -24,8 +24,8 @@ class Example: Operation {
     self.url = url
   }
   
-  var allowsCellularAccess: Bool { get {
-    return session.configuration.allowsCellularAccess }
+  var allowsCellularAccess: Bool {
+    return session.configuration.allowsCellularAccess
   }
   
   func reachable(_ status: OlaStatus) -> Bool {
