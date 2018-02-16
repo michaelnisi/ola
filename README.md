@@ -76,11 +76,9 @@ class ViewController: UIViewController {
           NSURLErrorTimedOut,
           NSURLErrorNotConnectedToInternet,
           NSURLErrorNetworkConnectionLost:
-            check()
-            return
+            return check()
           default:
-            done()
-            return
+            return done()
           }
         }
         done()
