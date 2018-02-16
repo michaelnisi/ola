@@ -4,150 +4,96 @@ The **Ola** [Swift](https://swift.org/) module monitors reachability of a named 
 
 ## Example
 
-This example shows how to use **Ola** in an asynchronous `Operation` to issue a bulletproof request, which, despite unreliable or no network connection, eventually succeeds, when the connection becomes available:
 
 ```swift
-import Foundation
+import UIKit
 import Ola
 
-enum ExampleError: Error {
-  case cancelled
-  case failed
-}
+class ViewController: UIViewController {
 
-class Example: Operation {
+  lazy var session: URLSession = {
+    let conf = URLSessionConfiguration.default
+    conf.requestCachePolicy = .reloadIgnoringLocalCacheData
+    conf.timeoutIntervalForRequest = 5
+    return URLSession(configuration: conf)
+  }()
 
-  private let session: URLSession
-  private let url: URL
+  var probe: Ola?
 
-  init(session: URLSession, url: URL) {
-    self.session = session
-    self.url = url
-  }
-
-  var allowsCellularAccess: Bool {
-    return session.configuration.allowsCellularAccess
-  }
-
-  func reachable(_ status: OlaStatus) -> Bool {
-    switch status {
-    case .reachable:
-      return true
-    case .cellular:
-      return allowsCellularAccess
-    case .unknown:
-      return false
+  var task: URLSessionTask? {
+    willSet {
+      task?.cancel()
+      probe = nil
     }
   }
 
-  var ola: Ola?
-
-  func check() {
-    guard let ola = Ola(host: self.url.host!) else {
-      done(ExampleError.failed)
-      return
+  @IBAction func valueChanged(_ sender: UISegmentedControl) {
+    func done() {
+      DispatchQueue.main.async {
+        sender.selectedSegmentIndex = 1
+      }
     }
 
-    self.ola = ola
+    let url = URL(string: "https://apple.com/")!
 
-    if reachable(ola.reach()) {
-      request()
-    } else {
-      let ok = ola.reach { [weak self] status in
-        if self?.isCancelled == false
-          && self?.reachable(status) == true {
-          self?.request()
+    func check() {
+      guard let p = Ola(host: url.host!) else {
+        return done()
+      }
+
+      probe = p
+
+      let status = p.reach()
+      guard (status == .cellular || status == .reachable) else {
+        let ok = p.reach { status in
+          guard (status == .cellular || status == .reachable) else {
+            return
+          }
+          DispatchQueue.main.async {
+            self.valueChanged(sender)
+          }
         }
-      }
-      if !ok {
-        fatalError("could not install callback")
-      }
-    }
-  }
-
-
-  // Neither protected nor synchronized for brevity.
-  var error: Error? = nil
-
-  private func done(_ error: Error? = nil) {
-    task?.cancel()
-    self.error = error
-    isExecuting = false
-    isFinished = true
-  }
-
-  weak var task: URLSessionTask?
-
-  func request() {
-    self.task?.cancel()
-
-    self.task = session.dataTask(with: url, completionHandler: {
-      [weak self] data, response, error in
-      if self?.isCancelled == true {
+        guard ok else {
+          return done()
+        }
         return
       }
-      if let er = error {
-        switch er._code {
-        case NSURLErrorCancelled:
-          return
-        case
-        NSURLErrorTimedOut,
-        NSURLErrorNotConnectedToInternet,
-        NSURLErrorNetworkConnectionLost:
-          self?.check()
-          return
-        default:
-          self?.done(er)
-          return
-        }
+
+      DispatchQueue.main.async {
+        self.valueChanged(sender)
       }
-      self?.done()
-    })
-    self.task?.resume()
-  }
-
-  // MARK: - Operation
-
-  private var _executing: Bool = false
-
-  override var isExecuting: Bool {
-    get { return _executing }
-    set {
-      willChangeValue(forKey: "isExecuting")
-      _executing = newValue
-      didChangeValue(forKey: "isExecuting")
     }
-  }
 
-  private var _finished: Bool = false
-
-  override var isFinished: Bool {
-    get { return _finished }
-    set {
-      willChangeValue(forKey: "isFinished")
-      _finished = newValue
-      didChangeValue(forKey: "isFinished")
+    switch sender.selectedSegmentIndex {
+    case 0:
+      task = session.dataTask(with: url) { data, response, error in
+        guard error == nil else {
+          let er = error!
+          switch er._code {
+          case NSURLErrorCancelled:
+            return
+          case
+          NSURLErrorTimedOut,
+          NSURLErrorNotConnectedToInternet,
+          NSURLErrorNetworkConnectionLost:
+            check()
+            return
+          default:
+            done()
+            return
+          }
+        }
+        done()
+      }
+      task?.resume()
+    case 1:
+      task = nil
+    default:
+      break
     }
-  }
-
-  override func start() {
-    guard !isCancelled else {
-      return done()
-    }
-    isExecuting = true
-    request()
-  }
-
-  override func cancel() {
-    done(ExampleError.cancelled)
-    super.cancel()
   }
 }
 ```
-
-To try this you can put the example app, included in this repo, on your device and tap *Request*, executing the operation above, while taking a walk at the perimeter of your WLAN with disabled Mobile Data. Running the app in the simulator, try switching Wi-Fi on and off.
-
-**Ola** doesn’t provide an `Operation` itself, because you’d already have one, encapuslating your request to transform reveived data, which is where you’d use **Ola**.
 
 ## Install
 

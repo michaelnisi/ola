@@ -10,36 +10,87 @@ import UIKit
 import Ola
 
 class ViewController: UIViewController {
-  let session: URLSession = {
+  
+  lazy var session: URLSession = {
     let conf = URLSessionConfiguration.default
     conf.requestCachePolicy = .reloadIgnoringLocalCacheData
     conf.timeoutIntervalForRequest = 5
     return URLSession(configuration: conf)
   }()
-
-  let queue = OperationQueue()
-  weak var op: Operation?
-
-  @IBAction func cancelUp(_ sender: UIButton) {
-    op?.cancel()
+  
+  var probe: Ola?
+  
+  var task: URLSessionTask? {
+    willSet {
+      task?.cancel()
+      probe = nil
+    }
   }
   
-  @IBAction func requestUp(_ sender: UIButton) {
-    sender.isEnabled = false
-    let url = URL(string: "https://apple.com")
-    let op = Example(session: session, url: url!)
-    op.completionBlock = { [weak op] in
-      if let er = op?.error {
-        NSLog("\(#function): completed with error: \(er)")
-      } else {
-        NSLog("\(#function): ok")
-      }
-      DispatchQueue.main.sync {
-        sender.isEnabled = true
+  @IBAction func valueChanged(_ sender: UISegmentedControl) {
+    func done() {
+      DispatchQueue.main.async {
+        sender.selectedSegmentIndex = 1
       }
     }
-    queue.addOperation(op)
-    self.op = op
+    
+    let url = URL(string: "https://apple.com/")!
+    
+    func check() {
+      guard let p = Ola(host: url.host!) else {
+        return done()
+      }
+      
+      probe = p
+      
+      let status = p.reach()
+      guard (status == .cellular || status == .reachable) else {
+        let ok = p.reach { status in
+          guard (status == .cellular || status == .reachable) else {
+            return
+          }
+          DispatchQueue.main.async {
+            self.valueChanged(sender)
+          }
+        }
+        guard ok else {
+          return done()
+        }
+        return
+      }
+      
+      DispatchQueue.main.async {
+        self.valueChanged(sender)
+      }
+    }
+
+    switch sender.selectedSegmentIndex {
+    case 0:
+      task = session.dataTask(with: url) { data, response, error in
+        guard error == nil else {
+          let er = error!
+          switch er._code {
+          case NSURLErrorCancelled:
+            return
+          case
+          NSURLErrorTimedOut,
+          NSURLErrorNotConnectedToInternet,
+          NSURLErrorNetworkConnectionLost:
+            check()
+            return
+          default:
+            done()
+            return
+          }
+        }
+        done()
+      }
+      task?.resume()
+    case 1:
+      task = nil
+    default:
+      break
+    }
   }
 }
 

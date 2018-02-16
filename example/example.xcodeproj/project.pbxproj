@@ -14,7 +14,6 @@
 		4C9373EA1A5087C600FFD5D3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373E91A5087C600FFD5D3 /* Images.xcassets */; };
 		4C9373ED1A5087C600FFD5D3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373EB1A5087C600FFD5D3 /* LaunchScreen.xib */; };
 		4C9373F91A5087C700FFD5D3 /* exampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373F81A5087C700FFD5D3 /* exampleTests.swift */; };
-		4C9374151A51C24F00FFD5D3 /* Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9374141A51C24F00FFD5D3 /* Example.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,7 +52,6 @@
 		4C9373F21A5087C700FFD5D3 /* exampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = exampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C9373F71A5087C700FFD5D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C9373F81A5087C700FFD5D3 /* exampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exampleTests.swift; sourceTree = "<group>"; };
-		4C9374141A51C24F00FFD5D3 /* Example.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Example.swift; sourceTree = "<group>"; };
 		4E3537F51DA1165D002C4B13 /* Ola.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ola.framework; path = "../../../Library/Developer/Xcode/DerivedData/olawork-efqcwnfndypgrcefnyuczehsigye/Build/Products/Debug-iphonesimulator/Ola.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,7 +98,6 @@
 			children = (
 				4C9373E21A5087C600FFD5D3 /* AppDelegate.swift */,
 				4C9373E41A5087C600FFD5D3 /* ViewController.swift */,
-				4C9374141A51C24F00FFD5D3 /* Example.swift */,
 				4C9373E61A5087C600FFD5D3 /* Main.storyboard */,
 				4C9373E91A5087C600FFD5D3 /* Images.xcassets */,
 				4C9373EB1A5087C600FFD5D3 /* LaunchScreen.xib */,
@@ -247,7 +244,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C9374151A51C24F00FFD5D3 /* Example.swift in Sources */,
 				4C9373E51A5087C600FFD5D3 /* ViewController.swift in Sources */,
 				4C9373E31A5087C600FFD5D3 /* AppDelegate.swift in Sources */,
 			);
