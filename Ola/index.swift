@@ -9,8 +9,6 @@
 import Foundation
 import SystemConfiguration
 
-// MARK: API
-
 /// Enumerates the three basic states host might be in—a boiled down version of
 /// `SCNetworkReachabilityFlags` in the `SystemConfiguration` framework.
 public enum OlaStatus: Int {
@@ -32,8 +30,18 @@ extension OlaStatus: CustomStringConvertible {
 
 /// Describes an API for reachability checking and monitoring.
 public protocol Reaching {
+  
+  /// Checks the reachability of the host.
+  ///
+  /// - Returns: The status of the host.
   func reach() -> OlaStatus
-  func reachWithCallback(_ cb: @escaping (OlaStatus) -> Void) -> Bool
+  
+  /// Installs the `callback` to be applied when the reachability of the host
+  /// changes. The monitoring stops when the given `Ola` object deinitializes.
+  ///
+  /// - Parameter callback: The callback to apply when reachability changes.
+  /// - Returns: `true` if the callback has been successfully installed.
+  func reach(setting callback: @escaping (OlaStatus) -> Void) -> Bool
 }
 
 // MARK: Internals
@@ -50,15 +58,12 @@ private func status(_ flags: SCNetworkReachabilityFlags) -> OlaStatus {
 
 final public class Ola: Reaching {
   private let reachability: SCNetworkReachability!
-  private let queue: DispatchQueue
   private var cb: ((OlaStatus) -> Void)! = nil
 
-  /// Create a new `Ola` object for the specifified host.
+  /// Create a new `Ola` object for `host`.
   ///
-  /// - parameter host: The name of the host to determine reachability for.
-  /// - parameter queue: The queue to schedule callbacks on.
-  public init?(host: String, queue: DispatchQueue) {
-    self.queue = queue
+  /// - Parameter host: The name of the host to determine reachability for.
+  public init?(host: String) {
     guard let reachability = SCNetworkReachabilityCreateWithName(
       kCFAllocatorDefault,
       host
@@ -73,9 +78,6 @@ final public class Ola: Reaching {
     SCNetworkReachabilitySetDispatchQueue(reachability, nil)
   }
 
-  /// Checks the reachability of the host.
-  ///
-  /// - returns: The status of the host.
   public func reach() -> OlaStatus {
     var flags = SCNetworkReachabilityFlags()
     guard SCNetworkReachabilityGetFlags(reachability, &flags) else {
@@ -84,16 +86,11 @@ final public class Ola: Reaching {
     return status(flags)
   }
 
-  /// Installs the callback to be applied when the reachability of the host 
-  /// changes. The monitoring stops when the given `Ola` object deinitializes.
-  /// 
-  /// - parameter cb: The callback to apply when reachability changes.
-  /// - returns: `true` if the callback has been successfully installed.
-  public func reachWithCallback(_ cb: @escaping (OlaStatus) -> Void) -> Bool {
+  public func reach(setting callback: @escaping (OlaStatus) -> Void) -> Bool {
     var context = SCNetworkReachabilityContext(
       version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
     
-    self.cb = cb
+    self.cb = callback
 
     let me = Unmanaged.passUnretained(self)
     let info = UnsafeMutableRawPointer(me.toOpaque())
@@ -102,7 +99,7 @@ final public class Ola: Reaching {
     
     let closure: SCNetworkReachabilityCallBack = {(_, flags, info) in
       let me = Unmanaged<Ola>.fromOpaque(info!).takeUnretainedValue()
-      me.queue.sync {
+      DispatchQueue.global().async {
         me.cb(status(flags))
       }
     }
@@ -111,6 +108,9 @@ final public class Ola: Reaching {
       return false
     }
     
-    return SCNetworkReachabilitySetDispatchQueue(reachability, DispatchQueue.main)
+    return SCNetworkReachabilitySetDispatchQueue(
+      reachability,
+      DispatchQueue.global(qos: .background)
+    )
   }
 }
