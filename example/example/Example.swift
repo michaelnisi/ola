@@ -11,18 +11,17 @@ import Ola
 
 enum ExampleError: Error {
   case cancelled
+  case failed
 }
 
 class Example: Operation {
-  
-  private let queue: DispatchQueue
+
   private let session: URLSession
   private let url: URL
 
-  init(session: URLSession, url: URL, queue: DispatchQueue) {
+  init(session: URLSession, url: URL) {
     self.session = session
     self.url = url
-    self.queue = queue
   }
   
   var allowsCellularAccess: Bool { get {
@@ -40,27 +39,28 @@ class Example: Operation {
     }
   }
   
-  lazy var ola: Ola? = { [unowned self] in
-    Ola(host: self.url.host!, queue: self.queue)
-  }()
+  var ola: Ola?
   
   func check() {
-    if let ola = self.ola {
-      if reachable(ola.reach()) {
-        request()
-      } else {
-        let ok = ola.reachWithCallback() { [weak self] status in
-          if self?.isCancelled == false
-            && self?.reachable(status) == true {
-            self?.request()
-          }
-        }
-        if !ok {
-          fatalError("could not install callback")
+    guard let ola = Ola(host: self.url.host!) else {
+      done(ExampleError.failed)
+      return
+    }
+    
+    self.ola = ola
+    
+    if reachable(ola.reach()) {
+      request()
+    } else {
+      let ok = ola.reach { [weak self] status in
+        if self?.isCancelled == false
+          && self?.reachable(status) == true {
+          self?.request()
         }
       }
-    } else {
-      fatalError("could not initialize")
+      if !ok {
+        fatalError("could not install callback")
+      }
     }
   }
   

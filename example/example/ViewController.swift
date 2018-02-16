@@ -27,8 +27,7 @@ class ViewController: UIViewController {
   @IBAction func requestUp(_ sender: UIButton) {
     sender.isEnabled = false
     let url = URL(string: "https://apple.com")
-    let q = DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated)
-    let op = Example(session: session, url: url!, queue: q)
+    let op = Example(session: session, url: url!)
     op.completionBlock = { [weak op] in
       if let er = op?.error {
         NSLog("\(#function): completed with error: \(er)")
