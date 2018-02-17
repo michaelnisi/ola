@@ -93,15 +93,11 @@ final public class Ola: Reaching {
     self.cb = callback
 
     let me = Unmanaged.passUnretained(self)
-    let info = UnsafeMutableRawPointer(me.toOpaque())
-    
-    context.info = info
+    context.info = UnsafeMutableRawPointer(me.toOpaque())
     
     let closure: SCNetworkReachabilityCallBack = {(_, flags, info) in
       let me = Unmanaged<Ola>.fromOpaque(info!).takeUnretainedValue()
-      DispatchQueue.global().async {
-        me.cb(status(flags))
-      }
+      me.cb?(status(flags))
     }
     
     guard SCNetworkReachabilitySetCallback(reachability, closure, &context) else {
