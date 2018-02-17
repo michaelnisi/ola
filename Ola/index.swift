@@ -58,7 +58,6 @@ private func status(_ flags: SCNetworkReachabilityFlags) -> OlaStatus {
 
 final public class Ola: Reaching {
   private let reachability: SCNetworkReachability!
-  private var cb: ((OlaStatus) -> Void)! = nil
 
   /// Create a new `Ola` object for `host`.
   ///
@@ -76,6 +75,7 @@ final public class Ola: Reaching {
   deinit {
     SCNetworkReachabilitySetCallback(reachability, nil, nil)
     SCNetworkReachabilitySetDispatchQueue(reachability, nil)
+    callback = nil
   }
 
   public func reach() -> OlaStatus {
@@ -85,19 +85,21 @@ final public class Ola: Reaching {
     }
     return status(flags)
   }
-
+  
+  private var callback: ((OlaStatus) -> Void)?
+  
   public func install(callback: @escaping (OlaStatus) -> Void) -> Bool {
     var context = SCNetworkReachabilityContext(
       version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
     
-    self.cb = callback
+    self.callback = callback
 
     let me = Unmanaged.passUnretained(self)
     context.info = UnsafeMutableRawPointer(me.toOpaque())
     
     let closure: SCNetworkReachabilityCallBack = {(_, flags, info) in
       let me = Unmanaged<Ola>.fromOpaque(info!).takeUnretainedValue()
-      me.cb?(status(flags))
+      me.callback?(status(flags))
     }
     
     guard SCNetworkReachabilitySetCallback(reachability, closure, &context) else {
