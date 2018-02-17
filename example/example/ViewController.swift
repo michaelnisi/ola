@@ -45,19 +45,26 @@ class ViewController: UIViewController {
       
       self.probe = p
       
+      // Simply checking if the host is reachable, the common use case.
       let status = p.reach()
+      
       guard (status == .cellular || status == .reachable) else {
-        let ok = p.reach { status in
+        // Unreachable host, installing a callback.
+        let ok = p.install { status in
           guard (status == .cellular || status == .reachable) else {
+            // Status changed, but host still isn’t reachable, keep waiting.
             return
           }
           DispatchQueue.main.async {
+            self.probe = nil
             self.valueChanged(sender)
           }
         }
         guard ok else {
+          // Installing the callback failed.
           return done()
         }
+        // Awaiting reachability changes.
         return
       }
       

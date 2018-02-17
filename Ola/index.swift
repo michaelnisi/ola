@@ -9,8 +9,8 @@
 import Foundation
 import SystemConfiguration
 
-/// Enumerates the three basic states host might be in—a boiled down version of
-/// `SCNetworkReachabilityFlags` in the `SystemConfiguration` framework.
+/// Enumerates three basic states a host might be in—a boiled down version of
+/// `SCNetworkReachabilityFlags` of the `SystemConfiguration` framework.
 public enum OlaStatus: Int {
   case unknown, reachable, cellular
 }
@@ -36,12 +36,12 @@ public protocol Reaching {
   /// - Returns: The status of the host.
   func reach() -> OlaStatus
   
-  /// Installs the `callback` to be applied when the reachability of the host
-  /// changes. The monitoring stops when the given `Ola` object deinitializes.
+  /// Installs `callback` to be applied when the reachability of the host
+  /// changes. The monitoring stops when this `Ola` object gets deallocated.
   ///
   /// - Parameter callback: The callback to apply when reachability changes.
   /// - Returns: `true` if the callback has been successfully installed.
-  func reach(setting callback: @escaping (OlaStatus) -> Void) -> Bool
+  func install(callback: @escaping (OlaStatus) -> Void) -> Bool
 }
 
 // MARK: Internals
@@ -86,7 +86,7 @@ final public class Ola: Reaching {
     return status(flags)
   }
 
-  public func reach(setting callback: @escaping (OlaStatus) -> Void) -> Bool {
+  public func install(callback: @escaping (OlaStatus) -> Void) -> Bool {
     var context = SCNetworkReachabilityContext(
       version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
     

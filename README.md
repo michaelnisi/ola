@@ -1,9 +1,8 @@
 # Ola - check reachability of host
 
-The **Ola** [Swift](https://swift.org/) module lets you check the reachability of a named host. You can set a callback to run when the reachability of the host has changed. **Ola** is a simple Swift wrapper around some of Apple’s [System Configuration](https://developer.apple.com/reference/SystemConfiguration) APIs, making them easier to use.
+The **Ola** [Swift](https://swift.org/) module lets you check network reachability of a named host. You can set a callback to run when the reachability of the host has changed. **Ola** is a simple Swift wrapper around some of Apple’s [System Configuration](https://developer.apple.com/reference/SystemConfiguration) APIs, making them easier to use.
 
 ## Example
-
 
 ```swift
 import UIKit
@@ -45,17 +44,18 @@ class ViewController: UIViewController {
 
       self.probe = p
 
-      // Simply checking reachability of host, sufficient for most use cases.
+      // Simply checking if the host is reachable, the common use case.
       let status = p.reach()
 
       guard (status == .cellular || status == .reachable) else {
-        // Host appears to be not reachable, installing a callback.
-        let ok = p.reach { status in
+        // Unreachable host, installing a callback.
+        let ok = p.install { status in
           guard (status == .cellular || status == .reachable) else {
             // Status changed, but host still isn’t reachable, keep waiting.
             return
           }
           DispatchQueue.main.async {
+            self.probe = nil
             self.valueChanged(sender)
           }
         }
@@ -63,7 +63,7 @@ class ViewController: UIViewController {
           // Installing the callback failed.
           return done()
         }
-        // Waiting for changes.
+        // Awaiting reachability changes.
         return
       }
 
