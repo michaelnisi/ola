@@ -45,7 +45,7 @@ class ViewController: UIViewController {
 
       self.probe = p
 
-      // Simply checking the reachability of the host, sufficient for most use cases.
+      // Simply checking reachability of host, sufficient for most use cases.
       let status = p.reach()
 
       guard (status == .cellular || status == .reachable) else {
