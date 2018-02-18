@@ -32,6 +32,7 @@ class ViewController: UIViewController {
     
     func done() {
       DispatchQueue.main.async {
+        self.task = nil
         sender.selectedSegmentIndex = 1
       }
     }
@@ -39,13 +40,15 @@ class ViewController: UIViewController {
     let url = URL(string: "https://apple.com/")!
     
     func check() {
+      self.task = nil
+      
       guard let p = Ola(host: url.host!) else {
         return done()
       }
       
       self.probe = p
       
-      // Simply checking if the host is reachable, the common use case.
+      // Simply checking if the host is reachable is the common use case.
       let status = p.reach()
       
       guard (status == .cellular || status == .reachable) else {
@@ -55,6 +58,7 @@ class ViewController: UIViewController {
             // Status changed, but host still isn’t reachable, keep waiting.
             return
           }
+          // Host supposedly reachable, try again.
           DispatchQueue.main.async {
             self.probe = nil
             self.valueChanged(sender)

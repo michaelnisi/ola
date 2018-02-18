@@ -9,7 +9,7 @@
 import Foundation
 import SystemConfiguration
 
-/// Enumerates three basic states a host might be in—a boiled down version of
+/// Enumerates three basic states a host might be in, a boiled down version of
 /// `SCNetworkReachabilityFlags` of the `SystemConfiguration` framework.
 public enum OlaStatus: Int {
   case unknown, reachable, cellular
