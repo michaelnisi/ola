@@ -121,7 +121,7 @@ enum OlaStatus: Int
 class Ola: Reaching
 ```
 
-`Ola` is main object of this module, it implements `Reaching`:
+`Ola` is the main object of this module, it implements `Reaching`:
 
 ```swift
 protocol Reaching {
