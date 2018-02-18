@@ -150,8 +150,7 @@ The common use case is to synchronously check if a given host is reachable.
 func reach() -> OlaStatus
 ```
 
-Returns `OlaStatus`.
-
+Returns the reachability of the host: unknown, reachable, or cellular.
 
 ### Monitoring Host
 
