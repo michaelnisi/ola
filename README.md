@@ -121,7 +121,7 @@ enum OlaStatus: Int
 class Ola: Reaching
 ```
 
-`Ola` is the main object of this module, it implements `Reaching`:
+`Ola` is the main object of this module, it implements the tiny `Reaching` API:
 
 ```swift
 protocol Reaching {
@@ -134,7 +134,7 @@ protocol Reaching {
 
 ### Creating a Probe
 
-Each `Ola` is dedicated to monitoring a specific host. Monitoring stop when the `Ola` object gets deallocated.
+Each `Ola` object is dedicated to monitoring a specific host. Monitoring stop when the `Ola` object gets deallocated.
 
 ```swift
 init?(host: String)
@@ -155,13 +155,13 @@ Returns `OlaStatus`.
 
 ### Monitoring Host
 
-A less common use case is to get notified, when the state of a given host has changed. For example, to reason if it’s appropiate to issue request.
+A less common use case is getting notified, when the state of a given host has changed. For example, to reason if it’s appropiate to issue a request.
 
 ```swift
 func install(callback: @escaping (OlaStatus) -> Void) -> Bool
 ```
 
-Installs the `callback` returning `true` if this has been successful.
+Returns `true` if installing the `callback` has been successful. The callback gets removed, of course, when its `Ola` object is deinitializing.
 
 ## Install
 
