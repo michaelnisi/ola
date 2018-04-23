@@ -101,7 +101,7 @@ final public class Ola: Reaching {
       guard let v = info else {
         return
       }
-      let me = Unmanaged<Ola>.fromOpaque(info).takeUnretainedValue()
+      let me = Unmanaged<Ola>.fromOpaque(v).takeUnretainedValue()
       me.callback?(status(flags))
     }
 
