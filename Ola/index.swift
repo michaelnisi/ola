@@ -30,12 +30,12 @@ extension OlaStatus: CustomStringConvertible {
 
 /// Describes an API for reachability checking and monitoring.
 public protocol Reaching {
-  
+
   /// Checks the reachability of the host.
   ///
   /// - Returns: The status of the host.
   func reach() -> OlaStatus
-  
+
   /// Installs `callback` to be applied when the reachability of the host
   /// changes. The monitoring stops when this `Ola` object gets deallocated.
   ///
@@ -85,27 +85,30 @@ final public class Ola: Reaching {
     }
     return status(flags)
   }
-  
+
   private var callback: ((OlaStatus) -> Void)?
-  
+
   public func install(callback: @escaping (OlaStatus) -> Void) -> Bool {
     var context = SCNetworkReachabilityContext(
       version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
-    
+
     self.callback = callback
 
     let me = Unmanaged.passUnretained(self)
     context.info = UnsafeMutableRawPointer(me.toOpaque())
-    
+
     let closure: SCNetworkReachabilityCallBack = {(_, flags, info) in
-      let me = Unmanaged<Ola>.fromOpaque(info!).takeUnretainedValue()
+      guard let v = info else {
+        return
+      }
+      let me = Unmanaged<Ola>.fromOpaque(info).takeUnretainedValue()
       me.callback?(status(flags))
     }
-    
+
     guard SCNetworkReachabilitySetCallback(reachability, closure, &context) else {
       return false
     }
-    
+
     return SCNetworkReachabilitySetDispatchQueue(
       reachability,
       DispatchQueue.global(qos: .background)
