@@ -11,6 +11,7 @@
 		4C9373C41A50879800FFD5D3 /* Ola.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9373B81A50879800FFD5D3 /* Ola.framework */; };
 		4C9373CB1A50879800FFD5D3 /* OlaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373CA1A50879800FFD5D3 /* OlaTests.swift */; };
 		4C9374081A50884300FFD5D3 /* index.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9374041A50884300FFD5D3 /* index.swift */; };
+		4CB30D0D209C5B42001F613F /* NetworkActivityCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB30D0C209C5B42001F613F /* NetworkActivityCounter.swift */; };
 		4E3CFB831B90687A00BD62AC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3CFB821B90687A00BD62AC /* SystemConfiguration.framework */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +33,7 @@
 		4C9373C91A50879800FFD5D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C9373CA1A50879800FFD5D3 /* OlaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OlaTests.swift; sourceTree = "<group>"; };
 		4C9374041A50884300FFD5D3 /* index.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = index.swift; sourceTree = "<group>"; };
+		4CB30D0C209C5B42001F613F /* NetworkActivityCounter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkActivityCounter.swift; sourceTree = "<group>"; };
 		4E3CFB821B90687A00BD62AC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -79,6 +81,7 @@
 			children = (
 				4C9373BD1A50879800FFD5D3 /* Ola.h */,
 				4C9374041A50884300FFD5D3 /* index.swift */,
+				4CB30D0C209C5B42001F613F /* NetworkActivityCounter.swift */,
 				4C9373BB1A50879800FFD5D3 /* Supporting Files */,
 			);
 			path = Ola;
@@ -220,6 +223,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CB30D0D209C5B42001F613F /* NetworkActivityCounter.swift in Sources */,
 				4C9374081A50884300FFD5D3 /* index.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -273,7 +277,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -333,7 +337,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -361,10 +365,10 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 17;
+				DYLIB_CURRENT_VERSION = 18;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Ola/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -387,10 +391,10 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 17;
+				DYLIB_CURRENT_VERSION = 18;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Ola/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
