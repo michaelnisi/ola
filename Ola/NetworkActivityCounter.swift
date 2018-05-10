@@ -19,7 +19,7 @@ public class NetworkActivityCounter {
   private let sQueue = DispatchQueue(
     label: "ink.codes.ola.NetworkActivityCounter")
   
-  var _count = 0
+  private var _count = 0
   
   private(set) var count: Int {
     get {
