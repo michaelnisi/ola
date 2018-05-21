@@ -126,6 +126,7 @@ class Ola: Reaching
 ```swift
 protocol Reaching {
   func reach() -> OlaStatus
+  func reach(statusBlock: @escaping (OlaStatus) -> Void)
   func install(callback: @escaping (OlaStatus) -> Void) -> Bool
 }
 ```
