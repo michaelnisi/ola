@@ -152,6 +152,12 @@ func reach() -> OlaStatus
 
 Returns the reachability of the host: unknown, reachable, or cellular.
 
+```swift
+func reach(statusBlock: @escaping (OlaStatus) -> Void)
+```
+
+Same as above, checks reachability, but not blocking.
+
 ### Monitoring Host
 
 A less common use case is getting notified, when the state of a given host has changed. For example, to reason if it’s appropiate to issue a request.
