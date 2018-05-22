@@ -146,7 +146,7 @@ init?(host: String)
 
 ### Checking Host Reachability
 
-The common use case is to synchronously check if a given host is reachable.
+The common use case is to synchronously, not on the main thread—[QA1693](https://developer.apple.com/library/content/qa/qa1693/_index.html), check if a given host is reachable.
 
 ```swift
 func reach() -> OlaStatus
