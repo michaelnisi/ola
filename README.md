@@ -45,33 +45,34 @@ class ViewController: UIViewController {
         return done()
       }
 
-      self.probe = p
-
       // Simply checking if the host is reachable is the common use case.
-      let status = p.reach()
 
-      guard (status == .cellular || status == .reachable) else {
-        // Unreachable host, installing a callback.
-        let ok = p.install { status in
-          guard (status == .cellular || status == .reachable) else {
-            // Status changed, but host still isn’t reachable, keep waiting.
-            return
+      p.reach { status in
+        guard (status == .cellular || status == .reachable) else {
+          // Unreachable host, installing a callback.
+          let ok = p.install { status in
+            guard (status == .cellular || status == .reachable) else {
+              // Status changed, but host still isn’t reachable, keep waiting.
+              return
+            }
+            // Host supposedly reachable, try again.
+            DispatchQueue.main.async {
+              self.probe = nil
+              self.valueChanged(sender)
+            }
           }
-          // Host supposedly reachable, try again.
-          DispatchQueue.main.async {
-            self.probe = nil
-            self.valueChanged(sender)
+          guard ok else {
+            // Installing the callback failed.
+            return done()
           }
+          // Awaiting reachability changes.
+          return self.probe = p
         }
-        guard ok else {
-          // Installing the callback failed.
-          return done()
+
+        DispatchQueue.main.async {
+          self.valueChanged(sender)
         }
-        // Awaiting reachability changes.
-        return
       }
-
-      valueChanged(sender)
     }
 
     switch sender.selectedSegmentIndex {

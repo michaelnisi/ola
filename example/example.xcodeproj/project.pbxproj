@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C58387D2036F63E00BF8BFB /* Ola.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C58387C2036F63E00BF8BFB /* Ola.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C9373E31A5087C600FFD5D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E21A5087C600FFD5D3 /* AppDelegate.swift */; };
 		4C9373E51A5087C600FFD5D3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E41A5087C600FFD5D3 /* ViewController.swift */; };
 		4C9373E81A5087C600FFD5D3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373E61A5087C600FFD5D3 /* Main.storyboard */; };
 		4C9373EA1A5087C600FFD5D3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373E91A5087C600FFD5D3 /* Images.xcassets */; };
 		4C9373ED1A5087C600FFD5D3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373EB1A5087C600FFD5D3 /* LaunchScreen.xib */; };
 		4C9373F91A5087C700FFD5D3 /* exampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373F81A5087C700FFD5D3 /* exampleTests.swift */; };
+		4CDAC98620B3C36A00B61212 /* Ola.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDAC98220B3C32700B61212 /* Ola.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,7 +33,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4C58387D2036F63E00BF8BFB /* Ola.framework in Embed Frameworks */,
+				4CDAC98620B3C36A00B61212 /* Ola.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -41,7 +41,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4C58387C2036F63E00BF8BFB /* Ola.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ola.framework; path = "../../../Library/Developer/Xcode/DerivedData/ola-bffjpztqopltlrektznmslfxnqtl/Build/Products/Debug-iphoneos/Ola.framework"; sourceTree = "<group>"; };
 		4C9373DD1A5087C600FFD5D3 /* example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C9373E11A5087C600FFD5D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C9373E21A5087C600FFD5D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -52,7 +51,7 @@
 		4C9373F21A5087C700FFD5D3 /* exampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = exampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C9373F71A5087C700FFD5D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C9373F81A5087C700FFD5D3 /* exampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exampleTests.swift; sourceTree = "<group>"; };
-		4E3537F51DA1165D002C4B13 /* Ola.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ola.framework; path = "../../../Library/Developer/Xcode/DerivedData/olawork-efqcwnfndypgrcefnyuczehsigye/Build/Products/Debug-iphonesimulator/Ola.framework"; sourceTree = "<group>"; };
+		4CDAC98220B3C32700B61212 /* Ola.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ola.framework; path = "../../../Library/Developer/Xcode/DerivedData/ola-bffjpztqopltlrektznmslfxnqtl/Build/Products/Debug-iphonesimulator/Ola.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,7 +75,6 @@
 		4C9373D41A5087C600FFD5D3 = {
 			isa = PBXGroup;
 			children = (
-				4C58387C2036F63E00BF8BFB /* Ola.framework */,
 				4C9373DF1A5087C600FFD5D3 /* example */,
 				4C9373F51A5087C700FFD5D3 /* exampleTests */,
 				4C9373DE1A5087C600FFD5D3 /* Products */,
@@ -134,7 +132,7 @@
 		4E3537F41DA1165D002C4B13 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4E3537F51DA1165D002C4B13 /* Ola.framework */,
+				4CDAC98220B3C32700B61212 /* Ola.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
