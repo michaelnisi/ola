@@ -87,6 +87,9 @@ final public class Ola: Reaching {
   }
 
   public func reach() -> OlaStatus {
+    if #available(iOS 10.0, *) {
+      dispatchPrecondition(condition: .notOnQueue(.main))
+    }
     var flags = SCNetworkReachabilityFlags()
     guard SCNetworkReachabilityGetFlags(reachability, &flags) else {
       return .unknown
