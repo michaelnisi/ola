@@ -97,7 +97,7 @@ final public class Ola: Reaching {
   public func reach(statusBlock: @escaping (OlaStatus) -> Void) {
     DispatchQueue.global().async { [weak self] in
       guard let status = self?.reach() else {
-        return
+        return statusBlock(.unknown)
       }
       statusBlock(status)
     }
