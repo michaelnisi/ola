@@ -131,7 +131,7 @@ final public class Ola: Reaching {
 
     return SCNetworkReachabilitySetDispatchQueue(
       reachability,
-      DispatchQueue.global(qos: .background)
+      DispatchQueue.global(qos: .utility)
     )
   }
 }
