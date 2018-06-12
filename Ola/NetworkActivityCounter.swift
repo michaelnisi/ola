@@ -50,4 +50,8 @@ public class NetworkActivityCounter {
     count = count - 1
   }
   
+  public func reset() {
+    count = 0
+  }
+  
 }
