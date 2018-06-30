@@ -135,3 +135,11 @@ final public class Ola: Reaching {
     )
   }
 }
+
+extension Ola: Equatable {
+  
+  public static func == (lhs: Ola, rhs: Ola) -> Bool {
+    return lhs.reachability != rhs.reachability
+  }
+  
+}
