@@ -12,6 +12,8 @@
 		4C9373CB1A50879800FFD5D3 /* OlaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373CA1A50879800FFD5D3 /* OlaTests.swift */; };
 		4C9374081A50884300FFD5D3 /* index.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9374041A50884300FFD5D3 /* index.swift */; };
 		4CB30D0D209C5B42001F613F /* NetworkActivityCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB30D0C209C5B42001F613F /* NetworkActivityCounter.swift */; };
+		4CDCD9F62117504600EA2543 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDCD9F52117504600EA2543 /* main.swift */; };
+		4CDCD9FC211750BA00EA2543 /* index.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9374041A50884300FFD5D3 /* index.swift */; };
 		4E3CFB831B90687A00BD62AC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3CFB821B90687A00BD62AC /* SystemConfiguration.framework */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +27,18 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		4CDCD9F12117504600EA2543 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		4C9373B81A50879800FFD5D3 /* Ola.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Ola.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C9373BC1A50879800FFD5D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -34,6 +48,8 @@
 		4C9373CA1A50879800FFD5D3 /* OlaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OlaTests.swift; sourceTree = "<group>"; };
 		4C9374041A50884300FFD5D3 /* index.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = index.swift; sourceTree = "<group>"; };
 		4CB30D0C209C5B42001F613F /* NetworkActivityCounter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkActivityCounter.swift; sourceTree = "<group>"; };
+		4CDCD9F32117504600EA2543 /* ola-cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "ola-cli"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CDCD9F52117504600EA2543 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		4E3CFB821B90687A00BD62AC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -54,6 +70,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4CDCD9F02117504600EA2543 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -63,7 +86,9 @@
 				4E3CFB821B90687A00BD62AC /* SystemConfiguration.framework */,
 				4C9373BA1A50879800FFD5D3 /* Ola */,
 				4C9373C71A50879800FFD5D3 /* OlaTests */,
+				4CDCD9F42117504600EA2543 /* ola-cli */,
 				4C9373B91A50879800FFD5D3 /* Products */,
+				4CDCD9FA2117507E00EA2543 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -72,6 +97,7 @@
 			children = (
 				4C9373B81A50879800FFD5D3 /* Ola.framework */,
 				4C9373C31A50879800FFD5D3 /* OlaTests.xctest */,
+				4CDCD9F32117504600EA2543 /* ola-cli */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -110,6 +136,21 @@
 				4C9373C91A50879800FFD5D3 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4CDCD9F42117504600EA2543 /* ola-cli */ = {
+			isa = PBXGroup;
+			children = (
+				4CDCD9F52117504600EA2543 /* main.swift */,
+			);
+			path = "ola-cli";
+			sourceTree = "<group>";
+		};
+		4CDCD9FA2117507E00EA2543 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,6 +203,23 @@
 			productReference = 4C9373C31A50879800FFD5D3 /* OlaTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		4CDCD9F22117504600EA2543 /* ola-cli */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CDCD9F92117504600EA2543 /* Build configuration list for PBXNativeTarget "ola-cli" */;
+			buildPhases = (
+				4CDCD9EF2117504600EA2543 /* Sources */,
+				4CDCD9F02117504600EA2543 /* Frameworks */,
+				4CDCD9F12117504600EA2543 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ola-cli";
+			productName = "ola-cli";
+			productReference = 4CDCD9F32117504600EA2543 /* ola-cli */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -169,7 +227,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 0700;
-				LastSwiftUpdateCheck = 0700;
+				LastSwiftUpdateCheck = 0940;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Michael Nisi";
 				TargetAttributes = {
@@ -181,6 +239,10 @@
 					4C9373C21A50879800FFD5D3 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = X23V32HT8X;
+						ProvisioningStyle = Automatic;
+					};
+					4CDCD9F22117504600EA2543 = {
+						CreatedOnToolsVersion = 9.4.1;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -199,6 +261,7 @@
 			targets = (
 				4C9373B71A50879800FFD5D3 /* Ola */,
 				4C9373C21A50879800FFD5D3 /* OlaTests */,
+				4CDCD9F22117504600EA2543 /* ola-cli */,
 			);
 		};
 /* End PBXProject section */
@@ -235,6 +298,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C9373CB1A50879800FFD5D3 /* OlaTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CDCD9EF2117504600EA2543 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CDCD9FC211750BA00EA2543 /* index.swift in Sources */,
+				4CDCD9F62117504600EA2543 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -446,6 +518,48 @@
 			};
 			name = Release;
 		};
+		4CDCD9F72117504600EA2543 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		4CDCD9F82117504600EA2543 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -472,6 +586,15 @@
 			buildConfigurations = (
 				4C9373D21A50879800FFD5D3 /* Debug */,
 				4C9373D31A50879800FFD5D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CDCD9F92117504600EA2543 /* Build configuration list for PBXNativeTarget "ola-cli" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CDCD9F72117504600EA2543 /* Debug */,
+				4CDCD9F82117504600EA2543 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

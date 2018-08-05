@@ -10,7 +10,7 @@ import Foundation
 import SystemConfiguration
 import os.log
 
-private let log = OSLog.disabled
+private let log = OSLog(subsystem: "ink.codes.ola", category: "net")
 
 /// Enumerates three basic states a host might be in, a boiled down version of
 /// `SCNetworkReachabilityFlags` of the `SystemConfiguration` framework.
@@ -59,10 +59,12 @@ public protocol Reaching {
 
 // MARK: Internals
 
-private func status(_ flags: SCNetworkReachabilityFlags) -> OlaStatus {
+private func makeStatus(_ flags: SCNetworkReachabilityFlags) -> OlaStatus {
+  #if os(iOS)
   if (flags.contains(.isWWAN)) {
     return .cellular
   }
+  #endif
   if (flags.contains(.reachable)) {
     return .reachable
   }
@@ -71,7 +73,7 @@ private func status(_ flags: SCNetworkReachabilityFlags) -> OlaStatus {
 
 final public class Ola: Reaching {
 
-  private let reachability: SCNetworkReachability!
+  private var reachability: SCNetworkReachability!
 
   /// Create a new `Ola` object for `host`.
   ///
@@ -99,7 +101,7 @@ final public class Ola: Reaching {
     guard SCNetworkReachabilityGetFlags(reachability, &flags) else {
       return .unknown
     }
-    return status(flags)
+    return makeStatus(flags)
   }
 
   public func reach(statusBlock: @escaping (OlaStatus) -> Void) {
@@ -112,6 +114,15 @@ final public class Ola: Reaching {
   }
 
   private var callback: ((OlaStatus) -> Void)?
+  
+  var status = OlaStatus.unknown {
+    didSet {
+      guard status != oldValue else {
+        return
+      }
+      callback?(status)
+    }
+  }
 
   public func activate(installing callback: @escaping (OlaStatus) -> Void) -> Bool {
     os_log("** installing callback", log: log, type: .debug)
@@ -125,13 +136,16 @@ final public class Ola: Reaching {
 
     let ptr = Unmanaged.passRetained(self).toOpaque()
     context.info = UnsafeMutableRawPointer(ptr)
+    context.release = {
+      Unmanaged<Ola>.fromOpaque($0).release()
+    } as @convention(c) (UnsafeRawPointer) -> Void
 
     guard SCNetworkReachabilitySetCallback(reachability, {(_, flags, info) in
       guard let ptr = info else {
         return
       }
       let me = Unmanaged<Ola>.fromOpaque(ptr).takeUnretainedValue()
-      me.callback?(status(flags))
+      me.status = makeStatus(flags)
     } , &context) else {
       return false
     }
@@ -141,8 +155,10 @@ final public class Ola: Reaching {
   }
 
   public func invalidate() {
+    callback = nil
     SCNetworkReachabilitySetCallback(reachability, nil, nil)
     SCNetworkReachabilitySetDispatchQueue(reachability, nil)
+    reachability = nil
   }
 
 }
