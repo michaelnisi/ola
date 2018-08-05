@@ -10,6 +10,8 @@ import Foundation
 import SystemConfiguration
 import os.log
 
+private let log = OSLog.disabled
+
 /// Enumerates three basic states a host might be in, a boiled down version of
 /// `SCNetworkReachabilityFlags` of the `SystemConfiguration` framework.
 public enum OlaStatus: Int {
@@ -48,17 +50,20 @@ public protocol Reaching {
   ///
   /// - Parameter callback: The callback to apply when reachability changes.
   /// - Returns: `true` if the callback has been successfully installed.
-  func install(callback: @escaping (OlaStatus) -> Void) -> Bool
+  func activate(installing callback: @escaping (OlaStatus) -> Void) -> Bool
+  
+  /// Invalidates this probe, removing the callback, preparing to `deinit`.
+  func invalidate()
 
 }
 
 // MARK: Internals
 
 private func status(_ flags: SCNetworkReachabilityFlags) -> OlaStatus {
-  if (flags.contains(SCNetworkReachabilityFlags.isWWAN)) {
+  if (flags.contains(.isWWAN)) {
     return .cellular
   }
-  if (flags.contains(SCNetworkReachabilityFlags.reachable)) {
+  if (flags.contains(.reachable)) {
     return .reachable
   }
   return .unknown
@@ -72,6 +77,8 @@ final public class Ola: Reaching {
   ///
   /// - Parameter host: The name of the host to determine reachability for.
   public init?(host: String) {
+    os_log("** creating reachability: %@", log: log, type: .debug, host)
+    
     guard let reachability = SCNetworkReachabilityCreateWithName(
       kCFAllocatorDefault,
       host
@@ -81,14 +88,13 @@ final public class Ola: Reaching {
     self.reachability = reachability
   }
 
-  deinit() {
-    os_log("** deinit", log: .default, type: .debug)
+  deinit {
+    os_log("** deinit", log: log, type: .debug)
   }
 
   public func reach() -> OlaStatus {
-    if #available(iOS 10.0, *) {
-      dispatchPrecondition(condition: .notOnQueue(.main))
-    }
+    dispatchPrecondition(condition: .notOnQueue(.main))
+    
     var flags = SCNetworkReachabilityFlags()
     guard SCNetworkReachabilityGetFlags(reachability, &flags) else {
       return .unknown
@@ -107,7 +113,11 @@ final public class Ola: Reaching {
 
   private var callback: ((OlaStatus) -> Void)?
 
-  public func install(callback: @escaping (OlaStatus) -> Void) -> Bool {
+  public func activate(installing callback: @escaping (OlaStatus) -> Void) -> Bool {
+    os_log("** installing callback", log: log, type: .debug)
+    
+    precondition(self.callback == nil)
+    
     var context = SCNetworkReachabilityContext(
       version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
 
@@ -117,7 +127,7 @@ final public class Ola: Reaching {
     context.info = UnsafeMutableRawPointer(ptr)
 
     guard SCNetworkReachabilitySetCallback(reachability, {(_, flags, info) in
-      guard let v = info else {
+      guard let ptr = info else {
         return
       }
       let me = Unmanaged<Ola>.fromOpaque(ptr).takeUnretainedValue()
