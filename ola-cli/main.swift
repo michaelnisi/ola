@@ -7,9 +7,10 @@
 //
 
 import Foundation
+import os.log
 
 let host = "apple.com"
-var probe = Ola(host: host)
+var probe = Ola(host: host, log: .default)
 
 probe?.activate { status in
   print("host status: (\(host), \(String(describing: status)))")
@@ -18,7 +19,5 @@ probe?.activate { status in
 sleep(10)
 probe?.invalidate()
 probe = nil
-sleep(5)
 
 print("OK")
-

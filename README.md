@@ -5,106 +5,24 @@ The **Ola** [Swift](https://swift.org/) module lets you check network reachabili
 ## Example
 
 ```swift
-import UIKit
-import Ola
+import Foundation
+import os.log
 
-class ViewController: UIViewController {
+let host = "apple.com"
+var probe = Ola(host: host, log: .default)
 
-  lazy var session: URLSession = {
-    let conf = URLSessionConfiguration.default
-    conf.requestCachePolicy = .reloadIgnoringLocalCacheData
-    conf.timeoutIntervalForRequest = 5
-    return URLSession(configuration: conf)
-  }()
-
-  var probe: Ola?
-
-  var task: URLSessionTask? {
-    willSet {
-      task?.cancel()
-      probe = nil
-    }
-  }
-
-  @IBAction func valueChanged(_ sender: UISegmentedControl) {
-    assert(Thread.isMainThread)
-
-    func done() {
-      DispatchQueue.main.async {
-        self.task = nil
-        sender.selectedSegmentIndex = 1
-      }
-    }
-
-    let url = URL(string: "https://apple.com/")!
-
-    func check() {
-      self.task = nil
-
-      guard let p = Ola(host: url.host!) else {
-        return done()
-      }
-
-      // Simply checking if the host is reachable is the common use case.
-
-      p.reach { status in
-        guard (status == .cellular || status == .reachable) else {
-          // Unreachable host, installing a callback.
-          let ok = p.install { status in
-            guard (status == .cellular || status == .reachable) else {
-              // Status changed, but host still isn’t reachable, keep waiting.
-              return
-            }
-            // Host supposedly reachable, try again.
-            DispatchQueue.main.async {
-              self.probe = nil
-              self.valueChanged(sender)
-            }
-          }
-          guard ok else {
-            // Installing the callback failed.
-            return done()
-          }
-          // Awaiting reachability changes.
-          return self.probe = p
-        }
-
-        DispatchQueue.main.async {
-          self.valueChanged(sender)
-        }
-      }
-    }
-
-    switch sender.selectedSegmentIndex {
-    case 0:
-      task = session.dataTask(with: url) { data, response, error in
-        guard error == nil else {
-          let er = error!
-          switch er._code {
-          case NSURLErrorCancelled:
-            return
-          case
-          NSURLErrorTimedOut,
-          NSURLErrorNotConnectedToInternet,
-          NSURLErrorNetworkConnectionLost:
-            return check()
-          default:
-            return done()
-          }
-        }
-        done()
-      }
-      task?.resume()
-    case 1:
-      task = nil
-    default:
-      break
-    }
-  }
+probe?.activate { status in
+  print("host status: (\(host), \(String(describing: status)))")
 }
+
+sleep(10)
+probe?.invalidate()
+probe = nil
+
+print("OK")
 ```
 
-Find this example in `./example`.
+Find this example in `./ola-cli`.
 
 ## Types
 
@@ -112,7 +30,7 @@ Find this example in `./example`.
 enum OlaStatus: Int
 ```
 
-`OlaStatus` eumerates three basic host states—a boiled down version of [SCNetworkReachabilityFlags](https://developer.apple.com/documentation/systemconfiguration/scnetworkreachabilityflags) in [SystemConfiguration](https://developer.apple.com/documentation/systemconfiguration).
+`OlaStatus` eumerates three boiled down host states, derived from [SCNetworkReachabilityFlags](https://developer.apple.com/documentation/systemconfiguration/scnetworkreachabilityflags).
 
 - `unknown`
 - `reachable`
@@ -128,7 +46,8 @@ class Ola: Reaching
 protocol Reaching {
   func reach() -> OlaStatus
   func reach(statusBlock: @escaping (OlaStatus) -> Void)
-  func install(callback: @escaping (OlaStatus) -> Void) -> Bool
+  func activate(installing callback: @escaping (OlaStatus) -> Void) -> Bool
+  func invalidate()
 }
 ```
 
@@ -136,17 +55,17 @@ protocol Reaching {
 
 ### Creating a Probe
 
-Each `Ola` object is dedicated to monitoring a specific host. Monitoring stop when the `Ola` object gets deallocated.
+Each `Ola` object is dedicated to monitoring a specific host.
 
 ```swift
-init?(host: String)
+init?(host: String, log: OSLog?)
 ```
 
 - `host` The name of the host to monitor.
 
 ### Checking Host Reachability
 
-The common use case is to synchronously, not on the main thread—[QA1693](https://developer.apple.com/library/content/qa/qa1693/_index.html), check if a given host is reachable.
+The common use case is to synchronously—not on the main thread though [QA1693](https://developer.apple.com/library/content/qa/qa1693/_index.html)—check if a given host is reachable.
 
 ```swift
 func reach() -> OlaStatus
@@ -158,21 +77,27 @@ Returns the reachability of the host: unknown, reachable, or cellular.
 func reach(statusBlock: @escaping (OlaStatus) -> Void)
 ```
 
-Same as above, checks reachability, but not blocking.
+Same as `reach()`, but non-blocking, executing on a system-provided global concurrent dispatch queues.
 
 ### Monitoring Host
 
 A less common use case is getting notified, when the state of a given host has changed. For example, to reason if it’s appropiate to issue a request.
 
 ```swift
-func install(callback: @escaping (OlaStatus) -> Void) -> Bool
+func activate(installing callback: @escaping (OlaStatus) -> Void) -> Bool
 ```
 
-Returns `true` if installing the `callback` has been successful. The callback gets removed, of course, when its `Ola` object is deinitializing.
+Returns `true` if installing the `callback` has been successful.
+
+```swift
+func invalidate()
+```
+
+Invalidates the probe removing the callback.
 
 ## Install
 
-At this time, the Xcode projects in this repo only contain iOS targets. To use **Ola** in your iOS app: add `Ola.xcodeproj` to your workspace and link `Ola.framework` into your targets.
+At this time, the Xcode projects in this repo only contain iOS targets. To use **Ola** in your iOS app: add `Ola.xcodeproj` to your workspace and link `Ola.framework` into your targets. On the other hand, it’s a single file, you could just drop in.
 
 ## License
 
