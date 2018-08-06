@@ -16,6 +16,7 @@ probe?.activate { status in
 }
 
 sleep(10)
+
 probe?.invalidate()
 probe = nil
 
