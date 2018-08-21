@@ -9,6 +9,8 @@
 import Foundation
 import os.log
 
+private let log = OSLog.disabled
+
 /// Maintains the visibility of the network activity indicator.
 public class NetworkActivityCounter {
   
@@ -31,7 +33,7 @@ public class NetworkActivityCounter {
     set {
       sQueue.sync {
         if #available(iOS 10.0, *), newValue < 0 {
-          os_log("NetworkActivityCounter: unbalanced attempt to remove")
+          os_log("NetworkActivityCounter: unbalanced attempt to remove", log: log)
         }
         _count = max(0, newValue)
         let v = _count != 0
