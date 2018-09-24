@@ -82,7 +82,7 @@ final public class Ola: Reaching {
   ///   - host: The name of the host to determine reachability for.
   ///   - log: The log object to use for logging.
   public init?(host: String, log: OSLog = .disabled) {
-    os_log("** creating reachability: %@", log: log, type: .debug, host)
+    os_log("creating reachability: %@", log: log, type: .debug, host)
 
     guard let reachability = SCNetworkReachabilityCreateWithName(
       kCFAllocatorDefault,
@@ -98,7 +98,7 @@ final public class Ola: Reaching {
   }
 
   deinit {
-    os_log("** deinit", log: log, type: .debug)
+    os_log("deinit", log: log, type: .debug)
   }
 
   public func reach() -> OlaStatus {
@@ -133,7 +133,7 @@ final public class Ola: Reaching {
 
   @discardableResult
   public func activate(installing callback: @escaping (OlaStatus) -> Void) -> Bool {
-    os_log("** installing callback", log: log, type: .debug)
+    os_log("installing callback", log: log, type: .debug)
     
     precondition(self.callback == nil)
     
