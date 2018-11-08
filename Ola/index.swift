@@ -45,6 +45,9 @@ public protocol Reaching {
   /// Installs `callback` to be applied when the reachability of the host
   /// changes. The monitoring stops when this `Ola` object gets deallocated.
   ///
+  /// If installing the callback failed and this returns `false`, you should
+  /// invalidate this probe and replace it.
+  ///
   /// - Parameter callback: The callback to apply when reachability changes.
   /// - Returns: `true` if the callback has been successfully installed.
   @discardableResult
@@ -133,9 +136,12 @@ final public class Ola: Reaching {
 
   @discardableResult
   public func activate(installing callback: @escaping (OlaStatus) -> Void) -> Bool {
+    guard self.callback == nil else {
+      os_log("not installing: callback already set", log: log)
+      return false
+    }
+
     os_log("installing callback", log: log, type: .debug)
-    
-    precondition(self.callback == nil)
     
     var context = SCNetworkReachabilityContext(
       version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
@@ -163,6 +169,8 @@ final public class Ola: Reaching {
   }
 
   public func invalidate() {
+    os_log("invalidating", log: log, type: .debug)
+
     callback = nil
     
     SCNetworkReachabilitySetCallback(reachability, nil, nil)
