@@ -141,7 +141,7 @@ final public class Ola: Reaching {
       return false
     }
 
-    os_log("installing callback", log: log, type: .debug)
+    os_log("installing callback", log: log, type: .info)
     
     var context = SCNetworkReachabilityContext(
       version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
@@ -169,7 +169,7 @@ final public class Ola: Reaching {
   }
 
   public func invalidate() {
-    os_log("invalidating", log: log, type: .debug)
+    os_log("invalidating", log: log, type: .info)
 
     callback = nil
     
