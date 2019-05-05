@@ -96,9 +96,9 @@ func invalidate()
 
 Invalidates the probe removing the callback.
 
-## Install
+## Installing Ola
 
-At this time, the Xcode projects in this repo only contain iOS targets. To use **Ola** in your iOS app: add `Ola.xcodeproj` to your workspace and link `Ola.framework` into your targets. On the other hand, it’s a single file, you could just drop in.
+To use **Ola** in your iOS app, add `Ola.xcodeproj` to your Xcode Workspace and link `Ola.framework` into your targets.
 
 ## License
 
