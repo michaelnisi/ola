@@ -19,7 +19,9 @@ public class NetworkActivityCounter {
   public static let shared = NetworkActivityCounter()
   
   private let sQueue = DispatchQueue(
-    label: "ink.codes.ola.NetworkActivityCounter")
+    label: "ink.codes.ola.NetworkActivityCounter",
+    target: .global()
+  )
   
   private var _count = 0
   
