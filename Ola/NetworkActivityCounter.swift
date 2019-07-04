@@ -26,19 +26,17 @@ public class NetworkActivityCounter {
   private var _count = 0
   
   private(set) var count: Int {
-    get {
-      return sQueue.sync {
-        return _count
-      }
-    }
+    get { return sQueue.sync { _count } }
     
     set {
       sQueue.sync {
         if #available(iOS 10.0, *), newValue < 0 {
           os_log("NetworkActivityCounter: unbalanced attempt to remove", log: log)
         }
+        
         _count = max(0, newValue)
         let v = _count != 0
+        
         DispatchQueue.main.async {
           UIApplication.shared.isNetworkActivityIndicatorVisible = v
         }
@@ -57,5 +55,4 @@ public class NetworkActivityCounter {
   public func reset() {
     count = 0
   }
-  
 }
