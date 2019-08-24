@@ -18,6 +18,16 @@ public class NetworkActivityCounter {
   
   public static let shared = NetworkActivityCounter()
   
+  /// This block executes on the main queue when this counter is modified
+  /// receiving `true` while the counter is not zero.
+  ///
+  /// Use `increase`, `decrease`, or `reset` to signal network activity. The 
+  /// default closure displayes a spinning indicator in the status bar that 
+  /// shows network activity. This indicator has been deprecated with iOS 13.
+  public var isNetworkActivityBlock: ((Bool) -> Void)? = { active in
+    UIApplication.shared.isNetworkActivityIndicatorVisible = active
+  }
+  
   private let sQueue = DispatchQueue(
     label: "ink.codes.ola.NetworkActivityCounter",
     target: .global(qos: .userInteractive)
@@ -37,12 +47,15 @@ public class NetworkActivityCounter {
         _count = max(0, newValue)
         let v = _count != 0
         
-        DispatchQueue.main.async {
-          UIApplication.shared.isNetworkActivityIndicatorVisible = v
+        DispatchQueue.main.async { [weak self] in
+          self?.isNetworkActivityBlock?(v)
         }
       }
     }
   }
+}
+
+extension NetworkActivityCounter {
   
   public func increase() {
     count = count + 1
