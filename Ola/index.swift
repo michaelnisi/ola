@@ -85,7 +85,7 @@ final public class Ola: Reaching {
   ///   - host: The name of the host to determine reachability for.
   ///   - log: The log object to use for logging.
   public init?(host: String, log: OSLog = .disabled) {
-    os_log("creating reachability: %@", log: log, type: .debug, host)
+    os_log("creating reachability: %@", log: log, type: .info, host)
 
     guard let reachability = SCNetworkReachabilityCreateWithName(
       kCFAllocatorDefault,
@@ -101,7 +101,7 @@ final public class Ola: Reaching {
   }
 
   deinit {
-    os_log("deinit", log: log, type: .debug)
+    os_log("deinit", log: log, type: .info)
   }
 
   public func reach() -> OlaStatus {

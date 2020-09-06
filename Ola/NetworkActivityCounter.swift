@@ -7,65 +7,31 @@
 //
 
 import Foundation
-import os.log
+import Combine
 
-private let log = OSLog.disabled
-
-/// Maintains the visibility of the network activity indicator.
 public class NetworkActivityCounter {
+
+  private let subject = CurrentValueSubject<Int, Never>(0)
   
   private init() {}
-  
-  public static let shared = NetworkActivityCounter()
-  
-  /// This block executes on the main queue when this counter is modified
-  /// receiving `true` while the counter is not zero.
-  ///
-  /// Use `increase`, `decrease`, or `reset` to signal network activity. The 
-  /// default closure displayes a spinning indicator in the status bar that 
-  /// shows network activity. This indicator has been deprecated with iOS 13.
-  public var isNetworkActivityBlock: ((Bool) -> Void)? = { active in
-    UIApplication.shared.isNetworkActivityIndicatorVisible = active
-  }
-  
-  private let sQueue = DispatchQueue(
-    label: "ink.codes.ola.NetworkActivityCounter",
-    target: .global(qos: .userInteractive)
-  )
-  
-  private var _count = 0
-  
-  private(set) var count: Int {
-    get { return sQueue.sync { _count } }
-    
-    set {
-      sQueue.sync {
-        if #available(iOS 10.0, *), newValue < 0 {
-          os_log("NetworkActivityCounter: unbalanced attempt to remove", log: log)
-        }
-        
-        _count = max(0, newValue)
-        let v = _count != 0
-        
-        DispatchQueue.main.async { [weak self] in
-          self?.isNetworkActivityBlock?(v)
-        }
-      }
-    }
-  }
-}
 
-extension NetworkActivityCounter {
-  
+  // MARK: - API
+
+  public static let shared = NetworkActivityCounter()
+
+  public var isActive: AnyPublisher<Bool, Never>  {
+    subject.map { $0 > 0 }.eraseToAnyPublisher()
+  }
+
   public func increase() {
-    count = count + 1
+    subject.value = subject.value + 1
   }
-  
+
   public func decrease() {
-    count = count - 1
+    subject.value = max(0, subject.value - 1)
   }
-  
+
   public func reset() {
-    count = 0
+    subject.value = 0
   }
 }
