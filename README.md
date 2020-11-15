@@ -23,8 +23,6 @@ probe = nil
 print("OK")
 ```
 
-Find this example in `./ola-cli`.
-
 ## Types
 
 ```swift
@@ -96,9 +94,9 @@ func invalidate()
 
 Invalidates the probe removing the callback.
 
-## Installing Ola
+## Install
 
-To use **Ola** in your iOS app, add `Ola.xcodeproj` to your Xcode Workspace and link `Ola.framework` into your targets.
+Add `https://github.com/michaelnisi/ola` to your package manifest.
 
 ## License
 
