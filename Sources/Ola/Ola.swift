@@ -1,5 +1,5 @@
 //
-//  index.swift
+//  Ola.swift
 //  ola
 //
 //  Created by Michael Nisi on 20.11.14.

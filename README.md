@@ -1,6 +1,6 @@
-# Ola - check reachability of host
+# Ola 
 
-The **Ola** [Swift](https://swift.org/) module lets you check network reachability of a named host. You can set a callback to run when the reachability of the host has changed. **Ola** is a simple Swift wrapper around some of Apple’s [System Configuration](https://developer.apple.com/reference/SystemConfiguration) APIs, making them easier to use.
+The Ola Swift package lets you check network reachability of a named host. You can set a callback to run when the reachability of the host has changed. Ola is a simple Swift wrapper around some of Apple’s [System Configuration](https://developer.apple.com/reference/SystemConfiguration) APIs, making them easier to use.
 
 ## Example
 
@@ -96,7 +96,7 @@ Invalidates the probe removing the callback.
 
 ## Install
 
-Add `https://github.com/michaelnisi/ola` to your package manifest.
+📦 Add `https://github.com/michaelnisi/ola` to your package manifest.
 
 ## License
 
