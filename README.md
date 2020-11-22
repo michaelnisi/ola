@@ -8,7 +8,7 @@ The Ola Swift package lets you check network reachability of a named host. You c
 import Foundation
 import os.log
 
-let host = "apple.com"
+let host = "1.1.1.1"
 var probe = Ola(host: host, log: .default)
 
 probe?.activate { status in
